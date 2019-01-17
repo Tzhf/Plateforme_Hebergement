@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plateforme du {{ "" }} de {{ "" }} {% endblock %}
+
+{% block body %}
+	<h2>Editer les informations de l'occupant :</h2>
+
+		{{ form_start(formoccupant) }}
+
+		{{ form_row(formoccupant.nom, {'attr' : {'placeholder': "Nom :"}, 'label' : 'Nom :'}) }}
+		{{ form_row(formoccupant.prenom, {'attr' : {'placeholder': "Prénom :"}, 'label' : 'Prénom :'}) }}
+		{{ form_row(formoccupant.dateNaissance, {'attr' : {'placeholder': "Date de naissance"}, 'label' : 'Date de naissance :'}) }}
+		{# {{ form_row(formoccupant.date_arrivee, {'attr' : {'placeholder': "Date d'arrivee"}, 'label' : 'Date de d\'arrivee :'}) }}
+		{{ form_row(formoccupant.date_sortie, {'attr' : {'placeholder': "Date de sortie"}, 'label' : 'Date de sortie :'}) }} #}
+		{{ form_row(formoccupant.nbEnfant, {'attr' : {'placeholder': "Nombre d'enfants"}, 'label' : 'Nombre d\'enfants :'}) }}
+
+		<button type="submit" class="btn btn-success">Editer</button>
+
+		{{ form_end(formoccupant) }}
+
+
+{% endblock %}

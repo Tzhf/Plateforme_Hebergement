@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+{# {% block title %}{{ logement.numRue }} {{ logement.nomRue }}, {{ logement.ville.nom }} {% endblock %} #}
+
+{% block body %}
+	<h1><a href="{{ path('show_logements') }}">Retour à la liste des logements</a></h1>
+	{# <h2>{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }} - <a href="{{ path('edit_logement', {'id': logement.id}) }}" class="btn btn-success">Editer</button></a></h2>
+	<h3>Chambre/Porte : {{ logement.numLgmt }} - Capacité : {{ logement.capacite }}</h3>
+	<h4>Places disponibles :  
+		{% if (logement.capacite) - (logement.occupant | length) >= 0 %}
+		    {{ (logement.capacite) - (logement.occupant | length) }}
+		{% else %}
+			<strong>Surcharge ({{ (logement.occupant | length) - (logement.capacite) }})</strong>
+		{% endif %}
+	</h4> #}
+	
+
+	<table id="example" class="display" style="width:100%">
+	    <thead>
+	        <tr>
+
+				<th>Nom</th>
+		        <th>Prénom</th>
+		        <th>Date de naissance</th>
+		        <th>Date d'arrivée</th>
+		        <th>Date de sortie</th>
+		        <th>Nombre d'enfants</th>
+		        <th></th>
+		        {# <th>Total : {{ logement.occupant | length }} Occupant{% if logement.occupant | length  <= 1 %}{% else %}s{% endif %}</th> #}
+	        </tr>
+	    </thead>
+	    <tbody>
+			{% for location in locations %}
+			<tr>
+		      	<td>{{ location.occupant.nom }}</td>	
+	        	<td>{{ location.occupant.prenom }}</td>	
+	        	<td>{{ location.occupant.dateNaissance  | date('d/m/y') }}</td>	
+	        	{# <td>{{ location.datearrivee  | date('d/m/y') }}</td>	 #}
+	        	{# <td>{{ location.datesortie  | date('d/m/y') }}</td> #}
+	        	<td>{{ location.occupant.nbEnfant }}</td>
+	        	<td><a href="{{ path('edit_occupant', {'id': location.occupant.id, 'token': csrf_token('editer-' ~ location.occupant.id) }) }}" class="btn btn-success">Editer</button></a>
+	        	<td><a href="{{ path('delete_occupant', {'id': location.occupant.id, 'token': csrf_token('supprimer-' ~ location.occupant.id) }) }}" class="btn btn-danger">Supprimer</button></a>
+			</tr>
+			{% endfor %}
+	    </tbody>
+	    <tfoot>
+	        <tr>
+				<th>Nom</th>
+		        <th>Prénom</th>
+		        <th>Date de naissance</th>
+		        <th>Date d'arrivée</th>
+		        <th>Date de sortie</th>
+		        <th>Nombre d'enfants</th>
+		        <th></th>
+		        {# <th>Total : {{ logement.occupant | length }} Occupant{% if logement.occupant | length  <= 1 %}{% else %}s{% endif %}</th> #}
+	    </tfoot>
+
+	</table>
+
+	<h3>Ajouter un nouvel occupant :</h3>
+
+		{# {{ form_start(formOccupant) }}
+			{{ form_row(formOccupant.nom, {'attr' : {'placeholder': "Nom"}}) }}
+			{{ form_row(formOccupant.prenom, {'attr' : {'placeholder': "Prenom"}}) }}
+			{{ form_row(formOccupant.dateNaissance, {'attr' : {'placeholder': "Date de naissance"}}) }}
+			{# {{ form_row(formOccupant.dateArrivee, {'attr' : {'placeholder': "Date d'arrivee"}}) }}
+			{{ form_row(formOccupant.dateSortie, {'attr' : {'placeholder': "Date de sortie"}}) }}
+			{{ form_row(formOccupant.nbEnfant, {'attr' : {'placeholder': "Nombre d'enfants"}}) }}
+			<button type="submit" class="btn btn-success">Ajouter</button>
+		{{ form_end(formOccupant) }} #}
+
+{% endblock %}

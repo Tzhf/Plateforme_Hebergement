@@ -1,0 +1,5 @@
+table {text-align: center;}
+th {text-align: center;}
+form { width: 50%; }
+.red { color: red; }
+.bg-red { background-color: rgba(223, 41, 41, 0.39) !important; }

@@ -1,0 +1,12 @@
+{{ form_start(logementForm) }}
+		{{ form_row(logementForm.numRue, {'attr' : {'placeholder': "N° Rue"}, 'label' : 'N° Rue :'}) }}
+		{{ form_row(logementForm.nomRue, {'attr' : {'placeholder': "Nom Rue"}, 'label' : 'Rue :'}) }}
+		{{ form_row(logementForm.ville, {'attr' : {'placeholder': "Ville"}, 'label' : 'VIlle :'}) }}
+		{{ form_row(logementForm.numLgmt, {'attr' : {'placeholder': "N° Logement"}, 'label' : 'N° Logement :'}) }}
+		{{ form_row(logementForm.numBat, {'attr' : {'placeholder': "N° Bat"}, 'label' : 'N° Bâtiment :'}) }}
+		{{ form_row(logementForm.etage, {'attr' : {'placeholder': "Etage"}, 'label' : 'Etage :'}) }}
+		{{ form_row(logementForm.typologie, {'attr' : {'placeholder': "Type"}, 'label' : 'Type :'}) }}
+		{{ form_row(logementForm.capacite, {'attr' : {'placeholder': "Capacité"}, 'label' : 'Capacité :'}) }}
+		{{ form_row(logementForm.description, {'attr' : {'placeholder': "Description"}, 'label' : 'Description :'}) }}
+		<button type="submit" class="btn btn-success">Ajouter</button>
+{{ form_end(logementForm) }}

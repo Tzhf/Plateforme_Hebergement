@@ -1,0 +1,38 @@
+security:
+    encoders:
+        App\Entity\Gestionnaire:
+            algorithm: bcrypt    
+
+    providers:
+        in_memory: 
+            memory:
+                users:
+                    admina:
+                        password: $2y$13$DuDTo6/SYCrEMa7uK1f5H.0mK5U6eZ15MfYBbiVFF.EeeRt7U2dBq
+                        roles: 'ROLE_ADMIN'
+        in_database:
+            entity:
+                class: App\Entity\Gestionnaire
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            anonymous: true
+            provider: in_database
+
+            form_login:
+                login_path: connexion
+                check_path: connexion
+                csrf_token_generator: security.csrf.token_manager
+
+            logout:
+                path: deconnexion
+                target: connexion
+
+    access_control:
+        - { path: ^/(connexion|inscription)$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: ROLE_USER }
+        - { path: ^/admin, role: ROLE_ADMIN }

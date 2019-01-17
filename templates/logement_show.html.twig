@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plateforme du {{ "" }} de {{ "" }} {% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-md-6">
+			<h2>{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }}</h2>
+			{% include 'logement_form.html.twig' %}
+		</div>
+
+		<div class="col-md-6">
+			<h2>Occupants :</h2>
+			<table id="example" class="display" style="width:100%">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Date de naissance</th>
+						<th>Date entrée</th>
+						<th>Date de sortie</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for location in locations %}
+						<tr {{ location.dateSortie and location.dateSortie > date() ? "class='red'"}}>
+							<td>{{ location.occupant.prenom }}</td>
+							<td>{{ location.occupant.nom }}</td>
+							<td>{{ location.occupant.dateNaissance|date("m/d/Y") }}</td>
+							<td>{{ location.dateEntree }}</td>
+							<td>{{ location.dateSortie }}
+							{% if location.dateSortie and location.dateSortie < date() %}
+								<br>La date de sortie est inférieure à la date d'aujourd'hui
+							{% endif %}
+							</td>
+							<td>
+								<form method="post" action="{{ path('occupant_delete', {'id': location.occupant.id, 'logementId': location.logement.id}) }}" onsubmit="return confirm('Confirmer la suppression')">
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ location.occupant.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% if logement.capacite - locations|length > 0 %}
+					<h3>Place disponibles : {{ logement.capacite - locations|length }}</h3>
+				{% elseif logement.capacite - locations|length == 0 %}
+					<h3 class='red'>Place disponibles : {{ logement.capacite - locations|length }}</h3>
+				{% else %}
+					<h3 class='red'>Surcharge ({{ locations|length - logement.capacite }})</h3>
+			{% endif %}
+
+			{{ form_start(occupantForm) }}
+				{{ form_row(occupantForm.nom, {'attr' : {'placeholder': "Nom"}, 'label' : 'Nom :'}) }}
+				{{ form_row(occupantForm.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : 'Prénom :'}) }}
+				{{ form_row(occupantForm.dateNaissance, {'attr' : {'placeholder': "Date de naissance :"}, 'label' : 'Date de naissance :'}) }}
+				{{ form_row(occupantForm.nbEnfant, {'attr' : {'placeholder': "Nombre d\'enfants :"}, 'label' : 'Nombre d\'enfants :'}) }}
+				<button type="submit" class="btn btn-success">Ajouter</button>
+			{{ form_end(occupantForm) }}
+		</div>
+{% endblock %}
