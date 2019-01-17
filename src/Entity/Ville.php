@@ -5,9 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VilleRepository")
+ * @UniqueEntity("nom", message="Cette ville est déjà présente dans la base de données")
  */
 class Ville
 {
@@ -20,11 +23,18 @@ class Ville
 
     /**
      * @ORM\Column(type="string", length=50)
-     */
+     * @Assert\NotBlank(message="Vous devez renseigner le nom de la ville")
+     * @Assert\Length(
+     *      max = 70,
+     *      maxMessage = "Le nom de la ville ne peut pas dépasser {{ limit }} caractères"
+     * )
+     */ 
+    
     private $nom;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Regex("/^[0-9]{5}$/", message="Cette valeur n'est pas valide")
      */
     private $codePostal;
 

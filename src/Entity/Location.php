@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
@@ -23,8 +24,9 @@ class Location
     private $logement;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Occupant", inversedBy="locations")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Occupant", cascade={"persist"}, inversedBy="locations")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\Valid
      */
     private $occupant;
 
@@ -72,24 +74,24 @@ class Location
         return $this;
     }
 
-    public function getDateEntree() : ? \DateTimeInterface
+    public function getDateEntree() : ?\DateTimeInterface
     {
         return $this->dateEntree;
     }
 
-    public function setDateEntree(\DateTimeInterface $dateEntree) : self
+    public function setDateEntree(\DateTimeInterface $dateEntree = null) : self
     {
         $this->dateEntree = $dateEntree;
 
         return $this;
     }
 
-    public function getDateSortie() : ? \DateTimeInterface
+    public function getDateSortie() : ?\DateTimeInterface
     {
         return $this->dateSortie;
     }
 
-    public function setDateSortie(\DateTimeInterface $dateSortie) : self
+    public function setDateSortie(\DateTimeInterface $dateSortie = null) : self
     {
         $this->dateSortie = $dateSortie;
 

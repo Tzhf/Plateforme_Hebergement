@@ -9,12 +9,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use App\Entity\Gestionnaire;
 use App\Entity\Logement;
-use App\Entity\Occupant;
 use App\Form\LogementType;
+use App\Entity\Occupant;
 use App\Form\OccupantType;
+use App\Form\LocationType;
+use App\Entity\Location;
 use App\Repository\GestionnaireRepository;
 use App\Repository\LocationRepository;
-use App\Entity\Location;
 
 
 class HebergementController extends AbstractController
@@ -63,18 +64,21 @@ class HebergementController extends AbstractController
 
         $locations = $location_repo->findAllByLogementAndActive($logement->getId());
 
-        $occupant = new Occupant();
-        $occupantForm = $this->createForm(OccupantType::class, $occupant);
-        $occupantForm->handleRequest($request);
+        $location = new Location();
+        $locationForm = $this->createForm(LocationType::class, $location);
+        $locationForm->handleRequest($request);
 
-        if ($occupantForm->isSubmitted() && $occupantForm->isValid()) {
-            $manager->persist($occupant);
+        // $occupant = new Occupant();
+        // $occupantForm = $this->createForm(OccupantType::class, $occupant);
+        // $occupantForm->handleRequest($request);
 
-            $location = new Location();
-            $location->setLogement($logement);
-            $location->setOccupant($occupant);
-            $location->setIsActive(1);
-            $manager->persist($location);
+        if ($locationForm->isSubmitted() && $locationForm->isValid()) {
+                // $manager->persist($occupant);
+                
+                $location->setLogement($logement);
+                // $location->setOccupant($occupant);
+                $location->setIsActive(1);
+                $manager->persist($location);
             
             $manager->flush();
 
@@ -86,7 +90,8 @@ class HebergementController extends AbstractController
             'logement' => $logement,
             'locations' => $locations,
             'logementForm' => $logementForm->createView(),
-            'occupantForm' => $occupantForm->createView()
+            'locationForm' => $locationForm->createView(),
+            // 'occupantForm' => $occupantForm->createView()
         ]);
     }
 

@@ -8,8 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GestionnaireRepository")
+ * @UniqueEntity("username", message="Cet utilisateur est déjà enregistré")
  * @UniqueEntity("email", message="Cet email est déjà utilisé")
  */
 class Gestionnaire implements UserInterface
@@ -23,25 +25,36 @@ class Gestionnaire implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=60)
-     * @Assert\Length(min=3, max=40, minMessage="Le nom du gestionnaire doit contenir au moins 3 caractères", 
-     * maxMessage="Le nom du gestonnaire peut contenir au maximum 40 caractères")
+     * @Assert\NotBlank(message="Vous devez renseigner un nom du gestionnaire")
+     * @Assert\Length(min=3, max=40, 
+     *      minMessage="Le nom du gestionnaire doit contenir au moins {{ limit }} caractères", 
+     *      maxMessage="Le nom du gestonnaire peut contenir au maximum {{ limit }} caractères"
+     * )
      */
     private $username;
-
+    
     /**
      * @ORM\Column(type="string", length=60)
+     * @Assert\NotBlank(message="Vous devez renseigner une adresse email")
      * @Assert\Email(message = "{{ value }} n'est pas une adresse email valide")
      */
     private $email;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=5, max=11, minMessage="Votre mot de passe doit contenir au moins 5 caractères")
+     * @Assert\NotBlank(message="Vous devez renseigner un mot de passe")
+     * @Assert\Length(min=5, max=11,
+     *      minMessage="Votre mot de passe doit contenir au moins 5 caractères",
+     *      maxMessage="Votre mot de passe ne peut pas contenir plus de {{ limit }} caractères")
      */
     private $password;
-
+    
     /**
+     * @Assert\NotBlank(message="Veuillez confirmer votre mot de passe")
      * @Assert\EqualTo(propertyPath="password", message="Les mots de passe ne sont pas identiques")
+     * @Assert\Length(min=5, max=11, 
+     *      minMessage="Votre mot de passe doit contenir au moins 5 caractères")
+     *      maxMessage="Votre mot de passe ne peut pas contenir plus de {{ limit }} caractères")
      */
     public $confirm_password;
 

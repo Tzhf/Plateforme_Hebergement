@@ -7,14 +7,27 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use App\Entity\Occupant;
+use App\Form\OccupantType;
 
 class LocationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date_arrivee', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
-            ->add('date_sortie', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+            ->add('dateEntree', DateType::class, array(
+                'widget' => 'single_text',
+                'by_reference' => true,
+                'empty_data' => ''
+            ))
+            ->add('dateSortie', DateType::class, array(
+                'widget' => 'single_text',
+                'by_reference' => true,
+                'empty_data' => ''
+            ))
+            ->add('occupant', OccupantType::class, [
+                'data_class' => Occupant::class
+            ])
             ->getForm();
     }
 

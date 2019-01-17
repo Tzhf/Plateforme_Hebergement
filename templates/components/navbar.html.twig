@@ -4,33 +4,24 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar">
-        <ul class="navbar-nav mr-auto">
-            {% if not app.user %}
+         {% if app.user %}
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                {% if app.user.role == "1" %}
+                    <li class="nav-item"><a href="{{ path('admin_logements_show') }}" class="nav-link">Administration</a></li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbar">
+                        <a href="{{ path('compte', {'id': app.user.id, 'token': csrf_token('options-' ~ app.user.id) }) }}" class="dropdown-item">Options</a>
+                        <a href="{{ path('deconnexion') }}" class="dropdown-item">Se déconnecter</a>
+                    </div>
+                </li>
+            </ul>
+         {% else %}
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a href="{{ path('inscription') }}" class="nav-link">Inscription</a></li>
                 <li class="nav-item"><a href="{{ path('connexion') }}" class="nav-link">Se connecter</a></li>
-            {% else %}
-                <li class="nav-item"><a href="{{ path('compte', {'id': app.user.id, 'token': csrf_token('options-' ~ app.user.id) }) }}" class="nav-link">Options</a></li>
-                {% if app.user.role == "1" %}
-                    <li class="nav-item"><a href="{{ path('admin') }}" class="nav-link">Admin</a></li>
-                {% endif %}
-                    <li class="nav-item"><a href="{{ path('deconnexion') }}" class="nav-link">Se déconnecter</a></li>
-            {% endif %}
-        </ul>
-        <ul class="navbar-nav ml-auto nav-flex-icons">
-            <li class="nav-item">
-                <a class="nav-link waves-effect waves-light"><i class="fab fa-twitter"></i></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link waves-effect waves-light"><i class="fab fa-google-plus-g"></i></a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i></a>
-                <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbar">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
-        </ul>
+            </ul>
+        {% endif %}
     </div>
 </nav>

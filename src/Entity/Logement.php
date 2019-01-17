@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LogementRepository")
@@ -20,11 +21,17 @@ class Logement
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Assert\Length(max = 5, maxMessage = "Le numéro de la rue ne peut pas dépasser {{ limit }} caractères")
      */
     private $numRue;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=70)
+     * @Assert\NotBlank(message = "Vous devez renseigner le nom de la rue")
+     * @Assert\Length(min = 3, max = 70,
+     *      minMessage = "Le nom de la rue est trop court",
+     *      maxMessage = "Le nom de la rue ne peut pas dépasser {{ limit }} caractères"
+     * )
      */
     private $nomRue;
 
@@ -35,31 +42,41 @@ class Logement
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Assert\Length(max = 5, maxMessage = "Le numéro du bâtiment ne peut pas dépasser {{ limit }} caractères")
      */
     private $numBat;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Assert\Length(max = 5, maxMessage = "Le numéro du logement ne peut pas dépasser {{ limit }} caractères")
      */
     private $numLgmt;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Assert\Length(max = 5, maxMessage = "Le numéro de l'étage ne peut pas dépasser {{ limit }} caractères")
      */
     private $etage;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Assert\Length(max = 5, maxMessage = "Ce champ ne peut pas dépasser {{ limit }} caractères")
      */
     private $typologie;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=5)
+     * @Assert\NotBlank(message="Vous devez renseigner la capacité du logement")
+     * @Assert\Range(min = 0, max = 50,
+     *      minMessage = "La capacité ne peut pas être négative",
+     *      maxMessage = "La capacité ne peut pas dépasser {{ limit }} personnes"
+     * )
      */
     private $capacite;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max = 255, maxMessage = "La description ne peut pas dépasser {{ limit }} charactères")
      */
     private $description;
 
@@ -101,7 +118,7 @@ class Logement
         return $this->nomRue;
     }
 
-    public function setNomRue(string $nomRue): self
+    public function setNomRue(?string $nomRue): self
     {
         $this->nomRue = $nomRue;
 

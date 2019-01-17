@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OccupantRepository")
@@ -20,21 +21,43 @@ class Occupant
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Assert\NotBlank(message = "Vous devez renseigner le nom de l'occupant")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 40,
+     *      minMessage = "Le nom est trop court",
+     *      maxMessage = "Le nom ne peut pas dépasser {{ limit }} caractères"
+     * )
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Assert\NotBlank(message = "Vous devez renseigner le prénom de l'occupant")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 40,
+     *      minMessage = "Le prénom est trop court",
+     *      maxMessage = "Le prénom ne peut pas dépasser {{ limit }} caractères"
+     * )
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\Date(message = "Le format de la date est invalide")
+     * @var string A "m-Y" formatted value
      */
     private $dateNaissance;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 30,
+     *      minMessage = "La nombre d'enfants ne peut pas être négatif",
+     *      maxMessage = "La nombre d'enfants ne peut pas dépasser {{ limit }}"
+     * )
      */
     private $nbEnfant;
 

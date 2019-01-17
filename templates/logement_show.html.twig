@@ -11,7 +11,7 @@
 
 		<div class="col-md-6">
 			<h2>Occupants :</h2>
-			<table id="example" class="display" style="width:100%">
+			<table id="datatable" class="display" style="width:100%">
 				<thead>
 					<tr>
 						<th>Nom</th>
@@ -24,12 +24,12 @@
 				</thead>
 				<tbody>
 					{% for location in locations %}
-						<tr {{ location.dateSortie and location.dateSortie > date() ? "class='red'"}}>
+						<tr {{ location.dateSortie and location.dateSortie < date() ? "class='red'"}}>
 							<td>{{ location.occupant.prenom }}</td>
 							<td>{{ location.occupant.nom }}</td>
 							<td>{{ location.occupant.dateNaissance|date("m/d/Y") }}</td>
-							<td>{{ location.dateEntree }}</td>
-							<td>{{ location.dateSortie }}
+							<td>{{ location.dateSortie ? location.dateEntree|date("m/d/Y") }}</td>
+							<td>{{ location.dateSortie ? location.dateSortie|date("m/d/Y") }}
 							{% if location.dateSortie and location.dateSortie < date() %}
 								<br>La date de sortie est inférieure à la date d'aujourd'hui
 							{% endif %}
@@ -53,12 +53,14 @@
 					<h3 class='red'>Surcharge ({{ locations|length - logement.capacite }})</h3>
 			{% endif %}
 
-			{{ form_start(occupantForm) }}
-				{{ form_row(occupantForm.nom, {'attr' : {'placeholder': "Nom"}, 'label' : 'Nom :'}) }}
-				{{ form_row(occupantForm.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : 'Prénom :'}) }}
-				{{ form_row(occupantForm.dateNaissance, {'attr' : {'placeholder': "Date de naissance :"}, 'label' : 'Date de naissance :'}) }}
-				{{ form_row(occupantForm.nbEnfant, {'attr' : {'placeholder': "Nombre d\'enfants :"}, 'label' : 'Nombre d\'enfants :'}) }}
+			{{ form_start(locationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+				{{ form_row(locationForm.occupant.nom, {'attr' : {'placeholder': "Nom"}, 'label' : 'Nom :'}) }}
+				{{ form_row(locationForm.occupant.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : 'Prénom :'}) }}
+				{{ form_row(locationForm.occupant.dateNaissance, {'label' : 'Date de naissance :'}) }}
+				{{ form_row(locationForm.occupant.nbEnfant, {'attr' : {'placeholder': "Nombre d'enfants"}, 'label' : 'Nombre d\'enfants :'}) }}
+				{{ form_row(locationForm.dateEntree, {'label' : 'Date d\'entrée :'}) }}
+				{{ form_row(locationForm.dateSortie, {'label' : 'Date de sortie :'}) }}
 				<button type="submit" class="btn btn-success">Ajouter</button>
-			{{ form_end(occupantForm) }}
+			{{ form_end(locationForm) }}
 		</div>
 {% endblock %}
