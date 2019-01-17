@@ -36,7 +36,6 @@ class HebergementController extends AbstractController
             $logement->setGestionnaire($gestionnaire);
             $manager->persist($logement);
             $manager->flush();
-
             $this->addFlash('success', 'Logement ajouté');
             return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
         }
@@ -57,31 +56,20 @@ class HebergementController extends AbstractController
 
         if ($logementForm->isSubmitted() && $logementForm->isValid()) {
             $manager->flush();
-
             $this->addFlash('success', 'Logement édité');
             return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
         }
 
         $locations = $location_repo->findAllByLogementAndActive($logement->getId());
-
         $location = new Location();
         $locationForm = $this->createForm(LocationType::class, $location);
         $locationForm->handleRequest($request);
 
-        // $occupant = new Occupant();
-        // $occupantForm = $this->createForm(OccupantType::class, $occupant);
-        // $occupantForm->handleRequest($request);
-
         if ($locationForm->isSubmitted() && $locationForm->isValid()) {
-                // $manager->persist($occupant);
-                
-                $location->setLogement($logement);
-                // $location->setOccupant($occupant);
-                $location->setIsActive(1);
-                $manager->persist($location);
-            
+            $location->setLogement($logement);
+            $location->setIsActive(1);
+            $manager->persist($location);
             $manager->flush();
-
             $this->addFlash('success', 'Occupant ajouté');
             return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
         }
@@ -91,7 +79,6 @@ class HebergementController extends AbstractController
             'locations' => $locations,
             'logementForm' => $logementForm->createView(),
             'locationForm' => $locationForm->createView(),
-            // 'occupantForm' => $occupantForm->createView()
         ]);
     }
 
@@ -141,7 +128,6 @@ class HebergementController extends AbstractController
             $manager->flush();
             $this->addFlash('success', 'Occupant édité');
         }
-
         return $this->render('saisie_occupant.html.twig', [
             'formoccupant' => $form->createView()
         ]);
