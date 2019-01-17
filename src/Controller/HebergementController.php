@@ -78,7 +78,7 @@ class HebergementController extends AbstractController
             
             $manager->flush();
 
-            $this->addFlash('success', 'occupant ajouté');
+            $this->addFlash('success', 'Occupant ajouté');
             return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
         }
 
