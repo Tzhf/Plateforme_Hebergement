@@ -189,6 +189,13 @@ class Gestionnaire implements UserInterface
         return $this->role; 
     }
 
+    public function setRole(bool $role): self
+    {
+        $this->role = $role;
+
+        return $this; 
+    }
+
     public function getSalt() {}
 
     public function eraseCredentials() {}

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+
+	<h2>Administration</h2>
+	<h3>{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}</h3>
+		{{ form_start(gestionnaireForm, {'attr': {'novalidate': 'novalidate'}}) }}
+			{{ form_row(gestionnaireForm.username, {'attr' : {'placeholder': "N° Rue"}, 'label' : 'N° Rue :'}) }}
+			{{ form_row(gestionnaireForm.email, {'attr' : {'placeholder': "Email"}, 'label' : 'Email :'}) }}
+			{{ form_row(gestionnaireForm.dispositif, {'label' : 'Dispositif :'}) }}
+			{{ form_row(gestionnaireForm.ville, {'label' : 'Ville :'}) }}
+			<button type="submit" class="btn btn-success">Editer</button>
+		{{ form_end(gestionnaireForm) }}
+
+{% endblock %}

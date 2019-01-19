@@ -47,10 +47,11 @@
 					{% endif %}
 					<td><a href="{{ path('logement_show', {'id': logement.id }) }}" class="btn btn-success">Voir</button></a></td>
 					<td>
-						<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}" onsubmit="return confirm('Confirmer la suppression')">
+						<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
 							<input type="hidden" name="_method" value="DELETE">
 							<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
-							<button class="btn btn-danger">Supprimer</button>
+							<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
+							{% include('components/modal_delete.html.twig') %}
 						</form>
 					</td>
 				</tr>

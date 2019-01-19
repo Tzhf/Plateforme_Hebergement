@@ -6,11 +6,11 @@
     <div class="collapse navbar-collapse" id="navbar">
          {% if app.user %}
             <ul class="navbar-nav ml-auto nav-flex-icons">
-                {% if app.user.role == "1" %}
-                    <li class="nav-item"><a href="{{ path('admin_logements_show') }}" class="nav-link">Administration</a></li>
+                {% if app.user.roles[0] == "ROLE_USER" %}
+                    <li class="nav-item"><a href="{{ path('admin_gestionnaires_show') }}" class="nav-link">Administration</a></li>
                 {% endif %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i></a>
+                    <a class="nav-link dropdown-toggle" id="navbar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> {{ app.user.username }}</a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbar">
                         <a href="{{ path('compte', {'id': app.user.id, 'token': csrf_token('options-' ~ app.user.id) }) }}" class="dropdown-item">Options</a>
                         <a href="{{ path('deconnexion') }}" class="dropdown-item">Se déconnecter</a>

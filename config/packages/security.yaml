@@ -4,12 +4,6 @@ security:
             algorithm: bcrypt    
 
     providers:
-        in_memory: 
-            memory:
-                users:
-                    admina:
-                        password: $2y$13$DuDTo6/SYCrEMa7uK1f5H.0mK5U6eZ15MfYBbiVFF.EeeRt7U2dBq
-                        roles: 'ROLE_ADMIN'
         in_database:
             entity:
                 class: App\Entity\Gestionnaire
