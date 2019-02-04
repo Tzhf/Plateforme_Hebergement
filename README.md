@@ -4,13 +4,13 @@
 2. php bin/console doctrine:database:create
 3. php bin/console doctrine:migrations:migrate
 4. on créé tout plein de fausses données avec faker ! php bin/console doctrine:fixtures:load  
- Visiblement je peux pas encoder le password donné par faker dans la fixture comme je le fais dans le securitycontroller avec UserPasswordEncoderInterface  
-Les mots de passe des faux compte sont donc non cryptés dans la base de données et donc on ne peut pas s'y connecter car le loginController décrypte le password de la bdd.  
+ Visiblement je peux pas encoder le password donné par faker dans la fixture comme je le fais dans le securityController avec UserPasswordEncoderInterface  
+Les mots de passe des faux comptes sont donc non cryptés dans la base de données et donc on ne peut pas s'y connecter car le loginController décrypte le password de la bdd.  
 Il faut donc se créer un compte manuellement. Pour l'instant j'ai laissé setRoles(array("ROLE_ADMIN")); dans le registrationController pour être admin automatiquement dès l'inscription pour le test.
 
 
-DONE MAIS A TESTER ++:  
-- Tokens CSRF: ça a l'air OK mais ne pas oublier de les ajouter manuellement pour les formulaires non générés par symfony (petits formulaires à la mano et boutons EDIT/DELETE)
+DONE MAIS A TESTER ++ :  
+- Tokens CSRF: ça a l'air OK mais ne pas oublier de les ajouter manuellement pour les formulaires non générés par symfony (petits formulaires à la main et boutons EDIT/DELETE)
 
 TO DO :  
 ATTENTION: un user n'a pas accès à la partie admin mais peut acceder aux logements qui ne sont pas les siens via l'URL
