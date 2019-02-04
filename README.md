@@ -9,10 +9,10 @@ Les mots de passe des faux compte sont donc non cryptés dans la base de donnée
 Il faut donc se créer un compte manuellement. Pour l'instant j'ai laissé setRoles(array("ROLE_ADMIN")); dans le registrationController pour être admin automatiquement dès l'inscription pour le test.
 
 
-DONE MAIS A TESTER ++:
+DONE MAIS A TESTER ++:  
 - Tokens CSRF: ça a l'air OK mais ne pas oublier de les ajouter manuellement pour les formulaires non générés par symfony (petits formulaires à la mano et boutons EDIT/DELETE)
 
-TO DO :
+TO DO :  
 ATTENTION: un user n'a pas accès à la partie admin mais peut acceder aux logements qui ne sont pas les siens via l'URL
 
 Roles : Depuis la modif des entités on ne peut plus promouvoir un utilisateur en admin, à refaire
