@@ -64,9 +64,9 @@ class Gestionnaire implements UserInterface
     private $ville;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default" : 0})
+     * @ORM\Column(type="json_array", nullable=true)
      */
-    private $role;
+    private $roles = array();
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Logement", mappedBy="gestionnaire", orphanRemoval=true)
@@ -179,21 +179,21 @@ class Gestionnaire implements UserInterface
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles() : array
     {
-        return ['ROLE_USER'];
+        $roles = $this->roles;
+ 
+        // Afin d'être sûr qu'un user a toujours au moins 1 rôle
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return array_unique($roles);
     }
 
-    public function getRole() :?bool
+    public function setRoles(array $roles) : void
     {
-        return $this->role; 
-    }
-
-    public function setRole(bool $role): self
-    {
-        $this->role = $role;
-
-        return $this; 
+        $this->roles = $roles;
     }
 
     public function getSalt() {}

@@ -3,7 +3,33 @@ body {
     padding: 0 !important;
     text-align: center;
 }
+.navbar {
+    background-color: rgb(138, 43, 226);
+}
+table.dataTable{
+    margin-top: 55px;
+}
 
+label {
+	font-weight: 700;
+}
+
+/* FORMS */
+.form-control, select {
+	text-align: center;
+}
+select {
+text-align-last: center;
+}
+
+.btn {
+    padding: .5rem;
+}
+.btn-secondary {
+    background-color:rgb(138, 43, 226) !important;
+}
+
+/* MODALS */
 nav.modal-open {
     width: 100% !important;
     padding-right: 0 !important;

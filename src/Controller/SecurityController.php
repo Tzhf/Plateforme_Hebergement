@@ -28,7 +28,7 @@ class SecurityController extends AbstractController
             $hash = $encoder->encodePassword($gestionnaire, $gestionnaire->getPassword());
 
             $gestionnaire->setPassword($hash);
-
+            $gestionnaire->setRoles(array("ROLE_ADMIN"));
             $manager->persist($gestionnaire);
             $manager->flush();
             $this->addFlash('success', 'Votre inscription a été prise en compte, veuillez vous connecter.');
@@ -41,7 +41,7 @@ class SecurityController extends AbstractController
     }
     
     /**
-     * @Route("moncompte/{id}", name="compte")
+     * @Route("options/{id}", name="options")
      */
     public function account(Gestionnaire $gestionnaire=null, Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
     {
@@ -57,7 +57,7 @@ class SecurityController extends AbstractController
         		$hash = $encoder->encodePassword($gestionnaire, $gestionnaire->getPassword());
 
         		$gestionnaire->setPassword($hash);
-
+                $gestionnaire->setRoles(array("ROLE_ADMIN"));
         		$manager->persist($gestionnaire);
         		$manager->flush();
                 $this->addFlash('success', 'Modifications effectuées');
@@ -67,7 +67,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('connexion');
         }
  
-        return $this->render('security/compte.html.twig', [
+        return $this->render('security/account.html.twig', [
             'form' => $form->createView()
         ]);
     }

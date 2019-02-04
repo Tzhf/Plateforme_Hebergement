@@ -4,7 +4,7 @@
 {% block body %}
 	<div class="row">
 		<div class="col-md-6">
-			<h2>{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }}</h2>
+			<h5>{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }} - <a class="btn btn-primary" href="{{ path('admin_gestionnaire_show', {'id': logement.gestionnaire.id}) }}">Retour au gestionnaire</a></h5>
 			{% include 'logement_form.html.twig' %}
 		</div>
 

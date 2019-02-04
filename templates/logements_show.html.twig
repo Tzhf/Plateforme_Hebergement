@@ -4,7 +4,8 @@
 
 {% block body %}
 
-	<h1>{{ app.user.username }}{{ app.user.email }}</h1>
+	<h1>Logements :</h1>
+	<h3>{{ app.user.username }} - {{ app.user.email }}</h3>
 	<table id="datatable" class="display" style="width:100%">
 		<thead>
 			<tr>
@@ -74,6 +75,9 @@
 		</tfoot>
 	</table>
 
-	<h3>Ajouter un logement :</h3>
-	{% include 'logement_form.html.twig' %}
+	<h3 class="mt-3">Ajouter un logement :</h3>
+	<div class="container">
+		{% include 'logement_form.html.twig' %}		
+	</div>
+
 {% endblock %}

@@ -5,7 +5,8 @@
 {% block body %}
 
 	<h2>Administration</h2>
-	<h3>{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}</h3>
+	<h3>Gestionnaire : {{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}</h3>
+	<div class="form-group mx-auto w-50 mb-4">
 		{{ form_start(gestionnaireForm, {'attr': {'novalidate': 'novalidate'}}) }}
 			{{ form_row(gestionnaireForm.username, {'attr' : {'placeholder': "N° Rue"}, 'label' : 'N° Rue :'}) }}
 			{{ form_row(gestionnaireForm.email, {'attr' : {'placeholder': "Email"}, 'label' : 'Email :'}) }}
@@ -13,5 +14,75 @@
 			{{ form_row(gestionnaireForm.ville, {'label' : 'Ville :'}) }}
 			<button type="submit" class="btn btn-success">Editer</button>
 		{{ form_end(gestionnaireForm) }}
+	</div>
+	<h3>Logements :</h3>
+	<table id="datatable" class="display" style="width:100%">
+		<thead>
+			<tr>
+				<th>N° rue</th>
+				<th>Nom rue</th>
+				<th>Ville</th>
+				<th>N° Bât</th>
+				<th>N° porte</th>
+				<th>Etage</th>
+				<th>Typologie</th>
+				<th>Description</th>
+				<th>Capacité</th>
+				<th>Occupants</th>
+				<th>Places disponibles</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% set totalOccupants = 0 %}
+		{% set totalDisponibles = 0 %}
+			{% for logement in gestionnaire.logements %}
+				{% set totalOccupants = totalOccupants + logement.locations|length %}
+				{% set totalDisponibles = totalDisponibles + (logement.capacite - logement.locations|length) %}
+				<tr {{ logement.capacite - logement.locations|length < 0 ? "class='bg-red'"}}>
+					<td>{{ logement.numRue }}</td>
+					<td>{{ logement.nomRue }}</td>
+					<td>{{ logement.ville.nom }}</td>
+					<td>{{ logement.numBat }}</td>
+					<td>{{ logement.numLgmt }}</td>
+					<td>{{ logement.etage }}</td>
+					<td>{{ logement.typologie }}</td>
+					<td>{{ logement.description }}</td>	
+					<td>{{ logement.capacite }}</td>
+					<td>{{ logement.locations|length }}</td>
+					{% if logement.capacite - logement.locations|length < 0 %}
+						<td><strong>Surcharge ({{ logement.locations|length - logement.capacite }})</strong></td>
+					{% else %}
+						<td>{{ logement.capacite - logement.locations|length }}</td>
+					{% endif %}
+					<td><a href="{{ path('admin_logement_show', {'id': logement.id }) }}" class="btn btn-success">Voir</button></a></td>
+					<td>
+						<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
+							<input type="hidden" name="_method" value="DELETE">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
+							<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
+							{% include('components/modal_delete.html.twig') %}
+						</form>
+					</td>
+				</tr>
+			{% endfor %} 
+		</tbody>
+		<tfoot>
+			<tr>
+				<th>N° rue</th>
+				<th>Nom rue</th>
+				<th>Ville</th>
+				<th>N° Bât</th>
+				<th>N° porte</th>
+				<th>Etage</th>
+				<th>Typologie</th>
+				<th>Description</th>
+				<th>Capacité</th>
+				<th>Total occupants : {{ totalOccupants }}</th>
+				<th>Total disponibles : {{ totalDisponibles }} </th>
+			</tr>
+		</tfoot>
+	</table>
 
 {% endblock %}

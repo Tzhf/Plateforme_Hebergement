@@ -2,8 +2,8 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-		<h1>Inscription</h1>
-	<div class="center-block">
+	<h1 class="mb-4">Inscription</h1>
+	<div class="mx-auto w-50">
 		{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 			{{ form_row(form.username, {'label': 'Nom du gestionnaire :', 'attr': {'placeholder': 'Nom du gestionnaire'}}) }}
 			{{ form_row(form.email, {'label': 'Email :', 'attr': {'placeholder': 'Adresse email'}}) }}

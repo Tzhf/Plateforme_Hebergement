@@ -45,6 +45,11 @@ class Location
      */
     private $isActive = false;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +111,18 @@ class Location
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getCreatedAt() : ? \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt) : self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
