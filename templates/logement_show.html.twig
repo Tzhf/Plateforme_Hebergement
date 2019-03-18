@@ -1,16 +1,83 @@
 {% extends 'base.html.twig' %}
-{% block title %}Plateforme du {{ "" }} de {{ "" }} {% endblock %}
+{% block title %}{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }}{% endblock %}
+{% block page_title %}{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }}{% endblock %}
+
 
 {% block body %}
-	<div class="row">
-		<div class="col-md-6">
-			<h2>{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }}</h2>
-			{% include 'logement_form.html.twig' %}
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="{{ path('logements_show') }}">Mes logements</a></li>
+			<li class="breadcrumb-item active" aria-current="page">{{ logement.numRue }}, {{ logement.nomRue }}, {{ logement.ville.nom }}</li>
+		</ol>
+	</nav>
+
+	<div class="row text-center">
+
+		{# WIDGET CAPACITE #}
+		<div class="col-xl-3 col-md-6 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase">Capacité</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">{{logement.capacite}}</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-bed fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div class="col-md-6">
-			<h2>Occupants :</h2>
-			<table id="datatable" class="display" style="width:100%">
+		{# WIDGET OCCUPANTS #}
+		<div class="col-xl-3 col-md-6 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase">Occupants</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">{{ locations|length }}</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas user-friends fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		{# WIDGET DISPONIBLES #}
+		<div class="col-xl-3 col-md-6 mx-auto">
+			<div class="card {{ (logement.capacite - locations|length) >= 0 ? 'border-left-primary' : 'border-left-primary-red' }} shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							{% if logement.capacite - locations|length >= 0 %}
+								<div class="text-xs font-weight-bold text-primary text-uppercase">Places disponibles</div>
+								<div class="h5 mb-0 font-weight-bold text-gray-800">{{ logement.capacite - locations|length }}</div>
+							{% else %}
+								<div class="text-xs font-weight-bold text-primary text-uppercase">Surcharge</div>
+								<div class="h5 mb-0 font-weight-bold text-gray-800">{{ locations|length - logement.capacite }}</div>
+							{% endif %}
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-calendar fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="card shadow mt-5 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Occupants</h6>
+		</div>
+
+		<div class="card-body">
+			<table id="datatable2" class="display" width="100%" cellspacing="0">
 				<thead>
 					<tr>
 						<th>Nom</th>
@@ -23,7 +90,7 @@
 				</thead>
 				<tbody>
 					{% for location in locations %}
-						<tr {{ location.dateSortie and location.dateSortie < date() ? "class='red'"}}>
+						<tr {{ location.dateSortie and location.dateSortie < date() ? "class='bg-red'"}}>
 							<td>{{ location.occupant.prenom }}</td>
 							<td>{{ location.occupant.nom }}</td>
 							<td>{{ location.occupant.dateNaissance|date("m/d/Y") }}</td>
@@ -46,24 +113,49 @@
 					{% endfor %}
 				</tbody>
 			</table>
-
-			{% if logement.capacite - locations|length > 0 %}
-					<h4>Places disponibles : {{ logement.capacite - locations|length }}</h4>
-				{% elseif logement.capacite - locations|length == 0 %}
-					<h4 class='red'>Places disponibles : {{ logement.capacite - locations|length }}</h4>
-				{% else %}
-					<h4 class='red'>Surcharge ({{ locations|length - logement.capacite }})</h4>
-			{% endif %}
-			
-			<h3 class="mt-3">Ajouter un occupant</h3>
-			{{ form_start(locationForm, {'attr': {'novalidate': 'novalidate'}}) }}
-				{{ form_row(locationForm.occupant.nom, {'attr' : {'placeholder': "Nom"}, 'label' : 'Nom :'}) }}
-				{{ form_row(locationForm.occupant.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : 'Prénom :'}) }}
-				{{ form_row(locationForm.occupant.dateNaissance, {'label' : 'Date de naissance :'}) }}
-				{{ form_row(locationForm.occupant.nbEnfant, {'attr' : {'placeholder': "Nombre d'enfants"}, 'label' : 'Nombre d\'enfants :'}) }}
-				{{ form_row(locationForm.dateEntree, {'label' : 'Date d\'entrée :'}) }}
-				{{ form_row(locationForm.dateSortie, {'label' : 'Date de sortie :'}) }}
-				<button type="submit" class="btn btn-success">Ajouter</button>
-			{{ form_end(locationForm) }}
 		</div>
+		
+		<div class="card-footer">
+			<h6 class="mb-4 font-weight-bold text-primary">Ajouter un nouvel occupant</h6>
+			<table>
+				<tbody>
+					<tr>
+					{{ form_start(locationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+					<td>{{ form_widget(locationForm.occupant.nom, {'attr' : {'placeholder': "Nom"}, 'label' : false }) }}</td>
+					<td>{{ form_widget(locationForm.occupant.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : false }) }}</td>
+					<td>{{ form_widget(locationForm.occupant.dateNaissance, {'label' : false }) }}</td>
+					<td>{{ form_widget(locationForm.dateEntree, {'label' : false }) }}</td>
+					<td>{{ form_widget(locationForm.dateSortie, {'label' : false }) }}</td>
+					<td><button type="submit" class="btn btn-success">Ajouter</button></td>
+					{{ form_end(locationForm) }}
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="card shadow mt-5 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Editer le logement</h6>
+		</div>	
+		<div class="card-body">
+			{% include 'logement_form.html.twig' %}
+		</div>	
+	</div>	
+
 {% endblock %}
+
+{% block javascripts %}
+	<script>
+		$(document).ready(function() {
+			$('#datatable2').DataTable({
+						"bInfo": false,
+						"language": {
+							"emptyTable": "Aucune donnée enregistrée"
+						},
+						"paging": false,
+						"searching": false
+					});	
+		});
+	</script>
+{% endblock javascripts %}

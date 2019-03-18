@@ -1,22 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Options - {{ app.user.username }}, {{ app.user.email }}{% endblock %}
+{% block page_title %}Options - {{ app.user.username }}, {{ app.user.email }}{% endblock %}
+{% block title %}Options du compte - {{ app.user.username }} - {{ app.user.email }}{% endblock %}
 
 {% block body %}
 
-	<h1>Options du compte</h1>
-	<h4 class="mb-4">{{ app.user.username }} - {{ app.user.email }}</h4>
+	<div class="card shadow mt-4 mb-5">
+    	<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Mes informations</h6>
+		</div>
 
-	<div class='container'>
-		{{ form_start(form) }}
-			{{ form_row(form.username, {'label': 'Nom du dispositif :', 'attr': {'placeholder': 'Nom du dispositif'}}) }}
-			{{ form_row(form.email, {'label': 'Email :', 'attr': {'placeholder': 'Adresse email'}}) }}
-			{{ form_row(form.password, {'label': 'Mot de passe :', 'attr': {'placeholder': 'Mot de passe'}}) }}
-			{{ form_row(form.confirm_password, {'label': 'Confirmez le mot de passe :', 'attr': {'placeholder': 'Confirmez le mot de passe'}}) }}
-			{{ form_row(form.dispositif, {'label': 'Gestionnaire :', 'attr': {'placeholder': 'Gestionnaire'}}) }}
-			{{ form_row(form.ville, {'label': 'Ville :', 'attr': {'placeholder': 'Ville'}}) }}
-			<button type="submit" class="btn btn-success">Modifier les informations</button>
-		{{ form_end(form) }}
+		<div class="card-body">
+			{{ form_start(form) }}
+				{{ form_row(form.username, {'label': 'Nom du dispositif :', 'attr': {'placeholder': 'Nom du dispositif'}}) }}
+				{{ form_row(form.email, {'label': 'Email :', 'attr': {'placeholder': 'Adresse email'}}) }}
+				{{ form_row(form.password, {'label': 'Mot de passe :', 'attr': {'placeholder': 'Mot de passe'}}) }}
+				{{ form_row(form.confirm_password, {'label': 'Confirmez le mot de passe :', 'attr': {'placeholder': 'Confirmez le mot de passe'}}) }}
+				{{ form_row(form.dispositif, {'label': 'Gestionnaire :', 'attr': {'placeholder': 'Gestionnaire'}}) }}
+				{{ form_row(form.ville, {'label': 'Ville :', 'attr': {'placeholder': 'Ville'}}) }}
+				<button type="submit" class="btn btn-success">Modifier les informations</button>
+			{{ form_end(form) }}
+		</div>
 	</div>
 
 {% endblock %}

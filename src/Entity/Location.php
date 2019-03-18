@@ -41,11 +41,6 @@ class Location
     private $dateSortie;
 
     /**
-     * @ORM\Column(type="boolean", options={"default":"0"})
-     */
-    private $isActive = false;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -99,18 +94,6 @@ class Location
     public function setDateSortie(\DateTimeInterface $dateSortie = null) : self
     {
         $this->dateSortie = $dateSortie;
-
-        return $this;
-    }
-
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
 
         return $this;
     }

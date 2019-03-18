@@ -1,20 +1,71 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Administration{% endblock %}
+{% block page_title %}Administration - {{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}{% endblock %}
 
 {% block body %}
 
-	<h2>Administration</h2>
-	<h3>Gestionnaire : {{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}</h3>
-	<div class="form-group mx-auto w-50 mb-4">
-		{{ form_start(gestionnaireForm, {'attr': {'novalidate': 'novalidate'}}) }}
-			{{ form_row(gestionnaireForm.username, {'attr' : {'placeholder': "N° Rue"}, 'label' : 'N° Rue :'}) }}
-			{{ form_row(gestionnaireForm.email, {'attr' : {'placeholder': "Email"}, 'label' : 'Email :'}) }}
-			{{ form_row(gestionnaireForm.dispositif, {'label' : 'Dispositif :'}) }}
-			{{ form_row(gestionnaireForm.ville, {'label' : 'Ville :'}) }}
-			<button type="submit" class="btn btn-success">Editer</button>
-		{{ form_end(gestionnaireForm) }}
-	</div>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="{{ path('admin_gestionnaires_show') }}">Gestionnaires</a></li>
+			<li class="breadcrumb-item active" aria-current="page">{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}</li>
+		</ol>
+	</nav>
+
+	<div class="row text-center">
+
+		{# WIDGET CAPACITE #}
+		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Capacité totale :</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totCapacite"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-bed fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET OCCUPANTS #}
+		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Occupants</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totOccupants"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-user-friends fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET DISPONIBLES #}
+		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Disponibles</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totDisponibles"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-calendar fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    </div>
+
+
 	<h3>Logements :</h3>
 	<table id="datatable" class="display" style="width:100%">
 		<thead>
@@ -29,17 +80,19 @@
 				<th>Description</th>
 				<th>Capacité</th>
 				<th>Occupants</th>
-				<th>Places disponibles</th>
+				<th>Disponibles</th>
 				<th></th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-		{% set totalOccupants = 0 %}
-		{% set totalDisponibles = 0 %}
+		{% set totOccupants = 0 %}
+		{% set totDisponibles = 0 %}
+		{% set totCapacite = 0 %}
 			{% for logement in gestionnaire.logements %}
-				{% set totalOccupants = totalOccupants + logement.locations|length %}
-				{% set totalDisponibles = totalDisponibles + (logement.capacite - logement.locations|length) %}
+				{% set totOccupants = totOccupants + logement.locations|length %}
+				{% set totDisponibles = totDisponibles + (logement.capacite - logement.locations|length) %}
+				{% set totCapacite =  totCapacite + logement.capacite %}
 				<tr {{ logement.capacite - logement.locations|length < 0 ? "class='bg-red'"}}>
 					<td>{{ logement.numRue }}</td>
 					<td>{{ logement.nomRue }}</td>
@@ -78,11 +131,27 @@
 				<th>Etage</th>
 				<th>Typologie</th>
 				<th>Description</th>
-				<th>Capacité</th>
-				<th>Total occupants : {{ totalOccupants }}</th>
-				<th>Total disponibles : {{ totalDisponibles }} </th>
+				<th>Capacité : {{ totCapacite }}</th>
+				<th>Occupants : {{ totOccupants }}</th>
+				<th>Disponibles : {{ totDisponibles }} </th>
 			</tr>
 		</tfoot>
 	</table>
 
+	<div class="form-group mx-auto w-50 mb-4">
+		{{ form_start(gestionnaireForm, {'attr': {'novalidate': 'novalidate'}}) }}
+			{{ form_row(gestionnaireForm.username, {'attr' : {'placeholder': "N° Rue"}, 'label' : 'N° Rue :'}) }}
+			{{ form_row(gestionnaireForm.email, {'attr' : {'placeholder': "Email"}, 'label' : 'Email :'}) }}
+			{{ form_row(gestionnaireForm.dispositif, {'label' : 'Dispositif :'}) }}
+			{{ form_row(gestionnaireForm.ville, {'label' : 'Ville :'}) }}
+			<button type="submit" class="btn btn-success">Editer</button>
+		{{ form_end(gestionnaireForm) }}
+	</div>
+
+	{# DOM SCRIPTS #}
+	<script>
+		document.getElementById("totCapacite").innerHTML = {{ totCapacite }};
+		document.getElementById("totOccupants").innerHTML = {{ totOccupants }};
+		document.getElementById("totDisponibles").innerHTML = {{ totDisponibles }};
+	</script>
 {% endblock %}

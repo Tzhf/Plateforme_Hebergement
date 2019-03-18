@@ -1,83 +1,184 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Plateforme hebergement - {{ app.user.username}}{% endblock %}
+{% block page_title %}Mes logements - {{ app.user.username}}{% endblock %}
+{% block title %}Mes Logements{% endblock %}
 
 {% block body %}
 
-	<h1>Logements :</h1>
-	<h3>{{ app.user.username }} - {{ app.user.email }}</h3>
-	<table id="datatable" class="display" style="width:100%">
-		<thead>
-			<tr>
-				<th>N° rue</th>
-				<th>Nom rue</th>
-				<th>Ville</th>
-				<th>N° Bât</th>
-				<th>N° porte</th>
-				<th>Etage</th>
-				<th>Typologie</th>
-				<th>Description</th>
-				<th>Capacité</th>
-				<th>Occupants</th>
-				<th>Places disponibles</th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-		{% set totalOccupants = 0 %}
-		{% set totalDisponibles = 0 %}
-			{% for logement in logements %}
-				{% set totalOccupants = totalOccupants + logement.locations|length %}
-				{% set totalDisponibles = totalDisponibles + (logement.capacite - logement.locations|length) %}
-				<tr {{ logement.capacite - logement.locations|length < 0 ? "class='bg-red'"}}>
-					<td>{{ logement.numRue }}</td>
-					<td>{{ logement.nomRue }}</td>
-					<td>{{ logement.ville.nom }}</td>
-					<td>{{ logement.numBat }}</td>
-					<td>{{ logement.numLgmt }}</td>
-					<td>{{ logement.etage }}</td>
-					<td>{{ logement.typologie }}</td>
-					<td>{{ logement.description }}</td>	
-					<td>{{ logement.capacite }}</td>
-					<td>{{ logement.locations|length }}</td>
-					{% if logement.capacite - logement.locations|length < 0 %}
-						<td><strong>Surcharge ({{ logement.locations|length - logement.capacite }})</strong></td>
-					{% else %}
-						<td>{{ logement.capacite - logement.locations|length }}</td>
-					{% endif %}
-					<td><a href="{{ path('logement_show', {'id': logement.id }) }}" class="btn btn-success">Voir</button></a></td>
-					<td>
-						<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
-							<input type="hidden" name="_method" value="DELETE">
-							<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
-							<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
-							{% include('components/modal_delete.html.twig') %}
-						</form>
-					</td>
-				</tr>
-			{% endfor %} 
-		</tbody>
-		<tfoot>
-			<tr>
-				<th>N° rue</th>
-				<th>Nom rue</th>
-				<th>Ville</th>
-				<th>N° Bât</th>
-				<th>N° porte</th>
-				<th>Etage</th>
-				<th>Typologie</th>
-				<th>Description</th>
-				<th>Capacité</th>
-				<th>Total occupants : {{ totalOccupants }}</th>
-				<th>Total disponibles : {{ totalDisponibles }} </th>
-			</tr>
-		</tfoot>
-	</table>
+	<div class="row text-center">
 
-	<h3 class="mt-3">Ajouter un logement :</h3>
-	<div class="container">
-		{% include 'logement_form.html.twig' %}		
+		{# WIDGET LOGEMENTS #}
+		<div class="col-xl-3 col-md-6 mb-3 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase">Logements</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totLogements"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-building fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET CAPACITE #}
+		<div class="col-xl-3 col-md-6 mb-3 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase">Capacité totale</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totCapacite"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-bed fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET OCCUPANTS #}
+		<div class="col-xl-3 col-md-6 mb-3 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase">Total occupants</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totOccupants"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-user-friends fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET DISPONIBLES #}
+		<div class="col-xl-3 col-md-6 mb-3 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2" id="card-disponibles">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase" id="disponibles">Places disponibles</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totDisponibles"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-calendar fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
+
+	<div class="card shadow mb-4">
+    	<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Logements</h6>
+		</div>
+    	<div class="card-body">
+			<table id="datatable" class="display mb-4" style="width:100%">
+				<thead>
+					<tr>
+						<th>N° rue</th>
+						<th>Nom rue</th>
+						<th>Ville</th>
+						<th>N° Bât</th>
+						<th>N° porte</th>
+						<th>Etage</th>
+						<th>Type</th>
+						<th>Détails</th>
+						<th>Capacité</th>
+						<th>Occupants</th>
+						<th>Disponibles</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set totCapacite = 0 %}
+					{% set totOccupants = 0 %}
+					{% set totDisponibles = 0 %}
+					{% for logement in logements %}
+						{% set totCapacite = totCapacite + logement.capacite %}
+						{% set totOccupants = totOccupants + logement.locations|length %}
+						{% set totDisponibles = totDisponibles + (logement.capacite - logement.locations|length) %}
+						<tr>
+							<td>{{ logement.numRue }}</td>
+							<td>{{ logement.nomRue }}</td>
+							<td>{{ logement.ville.nom }}</td>
+							<td>{{ logement.numBat }}</td>
+							<td>{{ logement.numLgmt }}</td>
+							<td>{{ logement.etage }}</td>
+							<td>{{ logement.typologie }}</td>
+							<td>{{ logement.description }}</td>	
+							<td>{{ logement.capacite }}</td>
+							<td>{{ logement.locations|length }}</td>
+							{% if logement.capacite - logement.locations|length < 0 %}
+								<td class="bg-red">Surcharge ({{ logement.locations|length - logement.capacite }})</td>
+							{% else %}
+								<td>{{ logement.capacite - logement.locations|length }}</td>
+							{% endif %}
+							<td><a href="{{ path('logement_show', {'id': logement.id }) }}" class="btn btn-success">Editer</button></a></td>
+							<td>
+								<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
+									<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
+									{% include('components/modal_delete.html.twig') %}
+								</form>
+							</td>
+						</tr>
+					{% endfor %} 
+				</tbody>
+				<tfoot>
+					<tr>
+						<th>N° rue</th>
+						<th>Nom rue</th>
+						<th>Ville</th>
+						<th>N° Bât</th>
+						<th>N° porte</th>
+						<th>Etage</th>
+						<th>Type</th>
+						<th>Details</th>
+						<th>Capacité :  {{ totCapacite }}</th>
+						<th>Occupants : {{ totOccupants }}</th>
+						{% if totDisponibles < 0 %}
+							<th>Surcharge ({{ - totDisponibles }})</th>
+						{% else %}
+							<th>Disponibles : {{ totDisponibles }}</th>
+						{% endif %}
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+
+	<div class="card shadow mb-4">
+    	<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Ajouter un logement</h6>
+		</div>
+    	<div class="card-body">
+			{% include 'logement_form.html.twig' %}		
+		</div>
+	</div>
+
+	{# DOM SCRIPTS #}
+	<script>
+		$("#totLogements").html( {{ logements|length }} );
+		$("#totCapacite").html( {{ totCapacite }} );
+		$("#totOccupants").html( {{ totOccupants }} );
+		$("#totDisponibles").html( {{ totDisponibles }} );
+		if ( {{ totDisponibles }} < 0) {
+			$("#disponibles").html("Surcharge");			
+			$("#totDisponibles").html( Math.abs({{ totDisponibles }}) );
+			$("#card-disponibles").addClass("border-left-primary-red");
+		}
+	</script>
 
 {% endblock %}

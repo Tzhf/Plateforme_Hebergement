@@ -60,14 +60,14 @@ class HebergementController extends AbstractController
             return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
         }
 
-        $locations = $location_repo->findAllByLogementAndActive($logement->getId());
+        $locations = $location_repo->findByLogement($logement->getId());
         $location = new Location();
         $locationForm = $this->createForm(LocationType::class, $location);
         $locationForm->handleRequest($request);
 
         if ($locationForm->isSubmitted() && $locationForm->isValid()) {
             $location->setLogement($logement);
-            $location->setIsActive(1);
+            $location->setCreatedAt(new \DateTime('now'));
             $manager->persist($location);
             $manager->flush();
             $this->addFlash('success', 'Occupant ajouté');

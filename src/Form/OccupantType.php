@@ -16,7 +16,7 @@ class OccupantType extends AbstractType
         $builder->add('nom')
                 ->add('prenom')
                 ->add('dateNaissance', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
-                ->add('nbEnfant', IntegerType::class)
+                // ->add('nbEnfant', IntegerType::class)
                 ->getForm();
     }
 

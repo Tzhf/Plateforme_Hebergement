@@ -1,27 +1,20 @@
 body {
-    margin: 70px 0px 0px 0px !important;
-    padding: 0 !important;
-    text-align: center;
-}
-.navbar {
-    background-color: rgb(138, 43, 226);
-}
-table.dataTable{
-    margin-top: 55px;
+    margin: 0;
+    padding: 0;
+    font-size: .9rem;
 }
 
-label {
-	font-weight: 700;
-}
 
 /* FORMS */
+label {
+    font-weight: 700;
+}
 .form-control, select {
 	text-align: center;
 }
 select {
 text-align-last: center;
 }
-
 .btn {
     padding: .5rem;
 }
@@ -34,4 +27,44 @@ nav.modal-open {
     width: 100% !important;
     padding-right: 0 !important;
     overflow-y: scroll !important;
+}
+
+.alert-danger {
+    width: 100%;
+    background-color: rgb(221, 31, 31); 
+    color: #FFF;
+    border-radius: 0px;
+    border: none;
+    /* font-weight: 700; */
+}
+
+.border-left-primary-red {
+    border-left: .25rem solid #cf2929 !important;
+}
+
+
+/* DATATABLES */
+table {
+    font-size: .8rem;
+    text-align: center;
+}
+
+.btn {
+    font-size: .8rem;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 5px 0px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 3px 10px;
+}
+
+table.dataTable tfoot th, table.dataTable tfoot td {
+    padding: 5px 0px;
+}
+
+.bg-red {
+    background-color: #cf292941 !important;
 }

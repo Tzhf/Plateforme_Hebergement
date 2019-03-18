@@ -1,11 +1,81 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Administration{% endblock %}
+{% block page_title %}Administration{% endblock %}
 
 {% block body %}
 
-	<h2>Administration</h2>
-	<h3>Gestionnaires</h3>
+	<div class="row text-center">
+
+		{# WIDGET LOGEMENTS #}
+		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Logements :</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totLogements"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-building fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET CAPACITE #}
+		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Capacité totale :</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totCapacite"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-bed fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET OCCUPANTS #}
+		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Occupants</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totOccupants"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-user-friends fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET DISPONIBLES #}
+		<div class="col-xl-3 col-md-6 mb-4">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Disponibles</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totDisponibles"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-calendar fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    </div>
 
 	<table id="datatable" class="display" style="width:100%">
         <thead >
@@ -13,11 +83,11 @@
 	  			<th>Gestionnaire</th>
 	  			<th>Dispositif</th>
 	  			<th>Ville</th>
-	  			<th>Nombre de logements</th>
-	  			<th>Capacité Totale</th>
+	  			<th>Logements</th>
+	  			<th>Capacité</th>
 	  			<th>Occupants</th>
-	  			<th>Places disponibles</th>
-	  			<th>	</th>
+	  			<th>Disponibles</th>
+	  			<th></th>
 	      	</tr>
 	    </thead>
 	    <tbody>
@@ -43,7 +113,11 @@
 					{% set totDisponibles = totDisponibles + (gestCapacite - gestOccupants) %}
 					<td>{{ gestCapacite }}</td>
 					<td>{{ gestOccupants }}</td>
-					<td>{{ gestCapacite - gestOccupants }}</td>
+					{% if (gestCapacite - gestOccupants) < 0 %}
+						<td class="bg-red">Surcharge ({{ gestOccupants - gestCapacite }})</td>
+					{% else %}
+						<td>{{ gestCapacite - gestOccupants }}</td>
+					{% endif %}
 					<td><a href="{{ path('admin_gestionnaire_show', {'id': gestionnaire.id }) }}" class="btn btn-success">Voir</button></a></td>
 				</tr>
         	{% endfor %}
@@ -53,13 +127,20 @@
   			<th>Gestionnaire</th>
   			<th>Dispositif</th>
   			<th>Ville</th>
-  			<th>Total logements : {{ totLogements }}</th>
-			<th>Total capacité : {{ totCapacite }}</th>
-			<th>Total occupants : {{ totOccupants }}</th>
-			<th>Total disponibles : {{ totDisponibles }}</th>
+  			<th>Logements: {{ totLogements }}</th>
+			<th>Capacité: {{ totCapacite }}</th>
+			<th>Occupants: {{ totOccupants }}</th>
+			<th>Disponibles: {{ totDisponibles }}</th>
 			<th></th>
             </tr>
         </tfoot>
     </table>
 
+	{# DOM SCRIPTS #}
+	<script>
+		document.getElementById("totLogements").innerHTML = {{ totLogements }};
+		document.getElementById("totCapacite").innerHTML = {{ totCapacite }};
+		document.getElementById("totOccupants").innerHTML = {{ totOccupants }};
+		document.getElementById("totDisponibles").innerHTML = {{ totDisponibles }};
+	</script>
 {% endblock %}
