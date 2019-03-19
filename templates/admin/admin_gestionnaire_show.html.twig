@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block page_title %}Administration - {{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}{% endblock %}
+{% block title %}{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}{% endblock %}
 
 {% block body %}
 
+	{# BREADCRUMB #}
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ path('admin_gestionnaires_show') }}">Gestionnaires</a></li>
@@ -48,11 +50,11 @@
 
 		{# WIDGET DISPONIBLES #}
 		<div class="col-xl-3 col-md-6 mb-4 mx-auto">
-			<div class="card border-left-primary shadow h-100 py-2">
+			<div class="card border-left-primary-green shadow h-100 py-2" id="card-disponibles">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 					<div class="col mr-2">
-						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Disponibles</div>
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1" id="disponibles">Disponibles</div>
 						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totDisponibles"></div>
 					</div>
 					<div class="col-auto">
@@ -63,89 +65,98 @@
 			</div>
 		</div>
 
-    </div>
+  	</div>
 
-
-	<h3>Logements :</h3>
-	<table id="datatable" class="display" style="width:100%">
-		<thead>
-			<tr>
-				<th>N° rue</th>
-				<th>Nom rue</th>
-				<th>Ville</th>
-				<th>N° Bât</th>
-				<th>N° porte</th>
-				<th>Etage</th>
-				<th>Typologie</th>
-				<th>Description</th>
-				<th>Capacité</th>
-				<th>Occupants</th>
-				<th>Disponibles</th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-		{% set totOccupants = 0 %}
-		{% set totDisponibles = 0 %}
-		{% set totCapacite = 0 %}
-			{% for logement in gestionnaire.logements %}
-				{% set totOccupants = totOccupants + logement.locations|length %}
-				{% set totDisponibles = totDisponibles + (logement.capacite - logement.locations|length) %}
-				{% set totCapacite =  totCapacite + logement.capacite %}
-				<tr {{ logement.capacite - logement.locations|length < 0 ? "class='bg-red'"}}>
-					<td>{{ logement.numRue }}</td>
-					<td>{{ logement.nomRue }}</td>
-					<td>{{ logement.ville.nom }}</td>
-					<td>{{ logement.numBat }}</td>
-					<td>{{ logement.numLgmt }}</td>
-					<td>{{ logement.etage }}</td>
-					<td>{{ logement.typologie }}</td>
-					<td>{{ logement.description }}</td>	
-					<td>{{ logement.capacite }}</td>
-					<td>{{ logement.locations|length }}</td>
-					{% if logement.capacite - logement.locations|length < 0 %}
-						<td><strong>Surcharge ({{ logement.locations|length - logement.capacite }})</strong></td>
-					{% else %}
-						<td>{{ logement.capacite - logement.locations|length }}</td>
-					{% endif %}
-					<td><a href="{{ path('admin_logement_show', {'id': logement.id }) }}" class="btn btn-success">Voir</button></a></td>
-					<td>
-						<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
-							<input type="hidden" name="_method" value="DELETE">
-							<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
-							<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
-							{% include('components/modal_delete.html.twig') %}
-						</form>
-					</td>
-				</tr>
-			{% endfor %} 
-		</tbody>
-		<tfoot>
-			<tr>
-				<th>N° rue</th>
-				<th>Nom rue</th>
-				<th>Ville</th>
-				<th>N° Bât</th>
-				<th>N° porte</th>
-				<th>Etage</th>
-				<th>Typologie</th>
-				<th>Description</th>
-				<th>Capacité : {{ totCapacite }}</th>
-				<th>Occupants : {{ totOccupants }}</th>
-				<th>Disponibles : {{ totDisponibles }} </th>
-			</tr>
-		</tfoot>
-	</table>
-
-	<div class="form-group mx-auto w-50 mb-4">
-		{{ form_start(gestionnaireForm, {'attr': {'novalidate': 'novalidate'}}) }}
-			{{ form_row(gestionnaireForm.username, {'attr' : {'placeholder': "N° Rue"}, 'label' : 'N° Rue :'}) }}
-			{{ form_row(gestionnaireForm.email, {'attr' : {'placeholder': "Email"}, 'label' : 'Email :'}) }}
-			{{ form_row(gestionnaireForm.dispositif, {'label' : 'Dispositif :'}) }}
-			{{ form_row(gestionnaireForm.ville, {'label' : 'Ville :'}) }}
-			<button type="submit" class="btn btn-success">Editer</button>
-		{{ form_end(gestionnaireForm) }}
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Logements</h6>
+		</div>
+		<div class="card-body card-table">
+			<table id="datatable" class="display" style="width:100%">
+				<thead>
+					<tr>
+						<th>N° rue</th>
+						<th>Nom rue</th>
+						<th>Ville</th>
+						<th>N° Bât</th>
+						<th>N° porte</th>
+						<th>Etage</th>
+						<th>Typologie</th>
+						<th>Description</th>
+						<th>Capacité</th>
+						<th>Occupants</th>
+						<th>Disponibles</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				{% set totOccupants = 0 %}
+				{% set totDisponibles = 0 %}
+				{% set totCapacite = 0 %}
+					{% for logement in gestionnaire.logements %}
+						{% set totOccupants = totOccupants + logement.locations|length %}
+						{% set totDisponibles = totDisponibles + (logement.capacite - logement.locations|length) %}
+						{% set totCapacite =  totCapacite + logement.capacite %}
+						<tr>
+							<td>{{ logement.numRue }}</td>
+							<td>{{ logement.nomRue }}</td>
+							<td>{{ logement.ville.nom }}</td>
+							<td>{{ logement.numBat }}</td>
+							<td>{{ logement.numLgmt }}</td>
+							<td>{{ logement.etage }}</td>
+							<td>{{ logement.typologie }}</td>
+							<td>{{ logement.description }}</td>	
+							<td>{{ logement.capacite }}</td>
+							<td>{{ logement.locations|length }}</td>
+							{% if logement.capacite - logement.locations|length < 0 %}
+								<td class="bg-red"><strong>Surcharge ({{ logement.locations|length - logement.capacite }})</strong></td>
+							{% else %}
+								<td>{{ logement.capacite - logement.locations|length }}</td>
+							{% endif %}
+							<td><a href="{{ path('admin_logement_show', {'id': logement.id }) }}" class="btn btn-success">Voir</button></a></td>
+							<td>
+								<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
+									<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
+									{% include('components/modal_delete.html.twig') %}
+								</form>
+							</td>
+						</tr>
+					{% endfor %} 
+				</tbody>
+				<tfoot>
+					<tr>
+						<th>N° rue</th>
+						<th>Nom rue</th>
+						<th>Ville</th>
+						<th>N° Bât</th>
+						<th>N° porte</th>
+						<th>Etage</th>
+						<th>Typologie</th>
+						<th>Description</th>
+						<th>Capacité: {{ totCapacite }}</th>
+						<th>Occupants: {{ totOccupants }}</th>
+						<th id="dispofoot">Disponibles : {{ totDisponibles }}</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	<div class="card shadow mt-5 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Editer le gestionnaire</h6>
+		</div>
+		<div class="card-body">
+			{{ form_start(gestionnaireForm, {'attr': {'novalidate': 'novalidate'}}) }}
+				{{ form_row(gestionnaireForm.username, {'attr' : {'placeholder': "Nom"}, 'label' : 'Nom :'}) }}
+				{{ form_row(gestionnaireForm.email, {'attr' : {'placeholder': "Email"}, 'label' : 'Email :'}) }}
+				{{ form_row(gestionnaireForm.dispositif, {'label' : 'Dispositif :'}) }}
+				{{ form_row(gestionnaireForm.ville, {'label' : 'Ville :'}) }}
+				<button type="submit" class="btn btn-success">Editer</button>
+			{{ form_end(gestionnaireForm) }}
+		</div>
 	</div>
 
 	{# DOM SCRIPTS #}
@@ -153,5 +164,13 @@
 		document.getElementById("totCapacite").innerHTML = {{ totCapacite }};
 		document.getElementById("totOccupants").innerHTML = {{ totOccupants }};
 		document.getElementById("totDisponibles").innerHTML = {{ totDisponibles }};
+		if ( {{ totDisponibles }} < 0) {
+			$("#disponibles").html("Surcharge");			
+			$("#dispofoot").html("Surcharge (" + Math.abs({{ totDisponibles }}) + ")" );			
+			$("#totDisponibles").html( Math.abs({{ totDisponibles }}) );
+		}
+		if ( {{ totDisponibles }} <= 0) {
+			$("#card-disponibles").addClass("border-left-primary-red");
+		}
 	</script>
 {% endblock %}

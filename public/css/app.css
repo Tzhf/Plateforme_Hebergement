@@ -9,13 +9,8 @@ body {
 label {
     font-weight: 700;
 }
-.form-control, select {
-	text-align: center;
-}
-select {
-text-align-last: center;
-}
 .btn {
+    font-size: .8rem;
     padding: .5rem;
 }
 .btn-secondary {
@@ -38,6 +33,10 @@ nav.modal-open {
     /* font-weight: 700; */
 }
 
+.border-left-primary-green {
+    border-left: .25rem solid #29cf5b !important;
+}
+
 .border-left-primary-red {
     border-left: .25rem solid #cf2929 !important;
 }
@@ -47,10 +46,6 @@ nav.modal-open {
 table {
     font-size: .8rem;
     text-align: center;
-}
-
-.btn {
-    font-size: .8rem;
 }
 
 table.dataTable thead th, table.dataTable thead td {
@@ -67,4 +62,20 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 .bg-red {
     background-color: #cf292941 !important;
+}
+
+button, .btn {
+    text-transform: uppercase;
+}
+
+.dataTable thead th {
+    font-weight: 600 !important;
+}
+
+.card-table {
+    padding: 10px 0px 0px 0px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: -0.5em;
 }

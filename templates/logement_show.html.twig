@@ -4,6 +4,8 @@
 
 
 {% block body %}
+
+	{# BREADCRUMB #}
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ path('logements_show') }}">Mes logements</a></li>
@@ -49,7 +51,7 @@
 		
 		{# WIDGET DISPONIBLES #}
 		<div class="col-xl-3 col-md-6 mx-auto">
-			<div class="card {{ (logement.capacite - locations|length) >= 0 ? 'border-left-primary' : 'border-left-primary-red' }} shadow h-100 py-2">
+			<div class="card {{ (logement.capacite - locations|length) > 0 ? 'border-left-primary-green' : 'border-left-primary-red' }} shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -76,7 +78,7 @@
 			<h6 class="m-0 font-weight-bold text-primary">Occupants</h6>
 		</div>
 
-		<div class="card-body">
+		<div class="card-body card-table">
 			<table id="datatable2" class="display" width="100%" cellspacing="0">
 				<thead>
 					<tr>
@@ -90,14 +92,14 @@
 				</thead>
 				<tbody>
 					{% for location in locations %}
-						<tr {{ location.dateSortie and location.dateSortie < date() ? "class='bg-red'"}}>
+						<tr>
 							<td>{{ location.occupant.prenom }}</td>
 							<td>{{ location.occupant.nom }}</td>
 							<td>{{ location.occupant.dateNaissance|date("m/d/Y") }}</td>
 							<td>{{ location.dateSortie ? location.dateEntree|date("m/d/Y") }}</td>
-							<td>{{ location.dateSortie ? location.dateSortie|date("m/d/Y") }}
+							<td {{ location.dateSortie and location.dateSortie < date() ? "class='bg-red'" }}>{{ location.dateSortie ? location.dateSortie|date("m/d/Y") }}
 							{% if location.dateSortie and location.dateSortie < date() %}
-								<br>La date de sortie est inférieure à la date d'aujourd'hui
+								<br><strong>La date de sortie est inférieure à la date d'aujourd'hui</strong>
 							{% endif %}
 							</td>
 							<td>

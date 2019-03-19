@@ -60,7 +60,7 @@
 
 		{# WIDGET DISPONIBLES #}
 		<div class="col-xl-3 col-md-6 mb-3 mx-auto">
-			<div class="card border-left-primary shadow h-100 py-2" id="card-disponibles">
+			<div class="card border-left-primary-green shadow h-100 py-2" id="card-disponibles">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -81,7 +81,7 @@
     	<div class="card-header py-3">
 			<h6 class="m-0 font-weight-bold text-primary">Logements</h6>
 		</div>
-    	<div class="card-body">
+    	<div class="card-body card-table">
 			<table id="datatable" class="display mb-4" style="width:100%">
 				<thead>
 					<tr>
@@ -177,6 +177,8 @@
 		if ( {{ totDisponibles }} < 0) {
 			$("#disponibles").html("Surcharge");			
 			$("#totDisponibles").html( Math.abs({{ totDisponibles }}) );
+		}
+		if ( {{ totDisponibles }} <= 0) {
 			$("#card-disponibles").addClass("border-left-primary-red");
 		}
 	</script>

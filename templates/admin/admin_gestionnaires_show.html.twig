@@ -60,7 +60,7 @@
 
 		{# WIDGET DISPONIBLES #}
 		<div class="col-xl-3 col-md-6 mb-4">
-			<div class="card border-left-primary shadow h-100 py-2">
+			<div class="card border-left-primary-green shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 					<div class="col mr-2">
@@ -77,64 +77,72 @@
 
     </div>
 
-	<table id="datatable" class="display" style="width:100%">
-        <thead >
-            <tr>
-	  			<th>Gestionnaire</th>
-	  			<th>Dispositif</th>
-	  			<th>Ville</th>
-	  			<th>Logements</th>
-	  			<th>Capacité</th>
-	  			<th>Occupants</th>
-	  			<th>Disponibles</th>
-	  			<th></th>
-	      	</tr>
-	    </thead>
-	    <tbody>
-		{% set totLogements = 0 %}
-		{% set totCapacite = 0 %}
-		{% set totOccupants = 0 %}
-		{% set totDisponibles = 0 %}
-			{% for gestionnaire in gestionnaires %}
-				{% set totLogements = totLogements + gestionnaire.logements|length %}
-				<tr>
-					<td>{{ gestionnaire.username }}</td>
-					<td>{{ gestionnaire.dispositif.nom }}</td>
-					<td>{{ gestionnaire.ville.nom }}</td>
-					<td>{{ gestionnaire.logements|length }}</td>
-					{% set gestCapacite = 0 %}
-					{% set gestOccupants = 0 %}
-					{% for logement in gestionnaire.logements %}
-						{% set gestCapacite = gestCapacite + logement.capacite %}
-						{% set gestOccupants = gestOccupants + logement.locations|length %}
-        			{% endfor %}
-					{% set totCapacite = totCapacite + gestCapacite %}
-					{% set totOccupants = totOccupants + gestOccupants %}
-					{% set totDisponibles = totDisponibles + (gestCapacite - gestOccupants) %}
-					<td>{{ gestCapacite }}</td>
-					<td>{{ gestOccupants }}</td>
-					{% if (gestCapacite - gestOccupants) < 0 %}
-						<td class="bg-red">Surcharge ({{ gestOccupants - gestCapacite }})</td>
-					{% else %}
-						<td>{{ gestCapacite - gestOccupants }}</td>
-					{% endif %}
-					<td><a href="{{ path('admin_gestionnaire_show', {'id': gestionnaire.id }) }}" class="btn btn-success">Voir</button></a></td>
-				</tr>
-        	{% endfor %}
-	    </tbody>	
-    	<tfoot>
-            <tr>
-  			<th>Gestionnaire</th>
-  			<th>Dispositif</th>
-  			<th>Ville</th>
-  			<th>Logements: {{ totLogements }}</th>
-			<th>Capacité: {{ totCapacite }}</th>
-			<th>Occupants: {{ totOccupants }}</th>
-			<th>Disponibles: {{ totDisponibles }}</th>
-			<th></th>
-            </tr>
-        </tfoot>
-    </table>
+	<div class="card shadow mt-5 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Occupants</h6>
+		</div>
+
+		<div class="card-body card-table">
+			<table id="datatable" class="display" style="width:100%">
+				<thead >
+					<tr>
+						<th>Gestionnaire</th>
+						<th>Dispositif</th>
+						<th>Ville</th>
+						<th>Logements</th>
+						<th>Capacité</th>
+						<th>Occupants</th>
+						<th>Disponibles</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				{% set totLogements = 0 %}
+				{% set totCapacite = 0 %}
+				{% set totOccupants = 0 %}
+				{% set totDisponibles = 0 %}
+					{% for gestionnaire in gestionnaires %}
+						{% set totLogements = totLogements + gestionnaire.logements|length %}
+						<tr>
+							<td>{{ gestionnaire.username }}</td>
+							<td>{{ gestionnaire.dispositif.nom }}</td>
+							<td>{{ gestionnaire.ville.nom }}</td>
+							<td>{{ gestionnaire.logements|length }}</td>
+							{% set gestCapacite = 0 %}
+							{% set gestOccupants = 0 %}
+							{% for logement in gestionnaire.logements %}
+								{% set gestCapacite = gestCapacite + logement.capacite %}
+								{% set gestOccupants = gestOccupants + logement.locations|length %}
+							{% endfor %}
+							{% set totCapacite = totCapacite + gestCapacite %}
+							{% set totOccupants = totOccupants + gestOccupants %}
+							{% set totDisponibles = totDisponibles + (gestCapacite - gestOccupants) %}
+							<td>{{ gestCapacite }}</td>
+							<td>{{ gestOccupants }}</td>
+							{% if (gestCapacite - gestOccupants) < 0 %}
+								<td class="bg-red">Surcharge ({{ gestOccupants - gestCapacite }})</td>
+							{% else %}
+								<td>{{ gestCapacite - gestOccupants }}</td>
+							{% endif %}
+							<td><a href="{{ path('admin_gestionnaire_show', {'id': gestionnaire.id }) }}" class="btn btn-success">Voir</button></a></td>
+						</tr>
+					{% endfor %}
+				</tbody>	
+				<tfoot>
+					<tr>
+					<th>Gestionnaire</th>
+					<th>Dispositif</th>
+					<th>Ville</th>
+					<th>Logements: {{ totLogements }}</th>
+					<th>Capacité: {{ totCapacite }}</th>
+					<th>Occupants: {{ totOccupants }}</th>
+					<th>Disponibles: {{ totDisponibles }}</th>
+					<th></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
 
 	{# DOM SCRIPTS #}
 	<script>
