@@ -76,6 +76,22 @@ button, .btn {
     padding: 10px 0px 0px 0px;
 }
 
+.card-login {
+    width: 50%;
+}
+
+.collapse-inner {
+    background-color: #6284ec;
+}
+
+.collapse-inner a {
+    color: #FFF !important;
+}
+.collapse-inner a:hover {
+    color: #FFF !important;
+    background-color: #7792e4 !important;
+}
+
 .dataTables_wrapper .dataTables_filter input {
     margin-left: -0.5em;
 }

@@ -17,6 +17,7 @@ use App\Form\GestionnaireType;
 use App\Form\LogementType;
 use App\Form\LocationType;
 use App\Repository\LocationRepository;
+use App\Repository\DispositifRepository;
 
 
 class AdminController extends AbstractController
@@ -29,6 +30,17 @@ class AdminController extends AbstractController
         $gestionnaires = $gestionnaire_repo->findAll();
         return $this->render('admin/admin_gestionnaires_show.html.twig', [
             'gestionnaires' => $gestionnaires
+        ]);
+    }
+
+    /**
+     * @Route("admin/dispositifs", name="admin_dispositifs_show")
+     */
+    public function adminDispositifsShow(DispositifRepository $dispositif_repo)
+    {
+        $dispositifs = $dispositif_repo->findAll();
+        return $this->render('admin/admin_dispositifs_show.html.twig', [
+            'dispositifs' => $dispositifs
         ]);
     }
 

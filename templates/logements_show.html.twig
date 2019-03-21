@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block page_title %}Mes logements - {{ app.user.username}}{% endblock %}
-{% block title %}Mes Logements{% endblock %}
+{% block title %}{{ app.user.username}}, {{ app.user.ville.nom}} - Mes Logements{% endblock %}
 
 {% block body %}
 

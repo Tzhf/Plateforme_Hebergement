@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}Administration{% endblock %}
+{% block title %}Administration - Dispositifs{% endblock %}
+
+{% block body %}
+
+	<div class="row text-center">
+
+		{# WIDGET LOGEMENTS #}
+		<div class="col-xl-3 col-md-6 mb-2 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Logements :</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800" id="totLogements"></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-building fa-2x text-gray-300"></i>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET CAPACITE #}
+		<div class="col-xl-3 col-md-6 mb-2 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Capacité totale :</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totCapacite"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-bed fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET OCCUPANTS #}
+		<div class="col-xl-3 col-md-6 mb-2 mx-auto">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Occupants</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totOccupants"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-user-friends fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# WIDGET DISPONIBLES #}
+		<div class="col-xl-3 col-md-6 mb-2">
+			<div class="card border-left-primary-green shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Disponibles</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totDisponibles"></div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-calendar fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+  </div>
+
+	<div class="card shadow mt-2 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Dispositifs</h6>
+		</div>
+
+		<div class="card-body card-table">
+			<table id="datatable" class="display" style="width:100%">
+				<thead >
+					<tr>
+						<th>Dispositif</th>
+						<th>Gestionnaires</th>
+						<th>Logements</th>
+						<th>Capacité</th>
+						<th>Occupants</th>
+						<th>Disponibles</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set totTotGestionnaires = 0 %}
+					{% set totTotLogements = 0 %}
+					{% set totTotCapacite = 0 %}
+					{% set totTotOccupants = 0 %}
+					{% for dispositif in dispositifs %}
+							{% set totLogements = 0 %}
+							{% set totCapacite = 0 %}
+							{% set totOccupants = 0 %}
+							{% for gestionnaire in dispositif.gestionnaires %}
+								{% set totLogements = totLogements + gestionnaire.logements|length %}
+								{% for logement in gestionnaire.logements %}
+									{% set totCapacite = totCapacite + logement.capacite %}
+									{% set totOccupants = totOccupants + logement.locations|length %}
+								{% endfor %}
+							{% endfor %}
+						<tr>
+							<td>{{ dispositif.nom }}</td>
+							<td>{{ dispositif.gestionnaires|length }}</td>
+							<td>{{ totLogements }}</td>
+							<td>{{ totCapacite }}</td>
+							<td>{{ totOccupants }}</td>
+							<td>{{ totCapacite - totOccupants }}</td>
+							{# <td><a href="{{ path('admin_dispositif_show', {'id': dispositif.id }) }}" class="btn btn-success">Voir</button></a></td> #}
+							<td><a href="" class="btn btn-success">Voir</button></a></td>
+						</tr>
+						{% set totTotGestionnaires = totTotGestionnaires + dispositif.gestionnaires|length %}
+						{% set totTotLogements = totTotLogements + totLogements %}
+						{% set totTotCapacite = totTotCapacite + totCapacite %}
+						{% set totTotOccupants = totTotOccupants + totOccupants %}
+					{% endfor %}
+				</tbody>	
+				<tfoot>
+					<tr>
+					<th>Dispositif</th>
+					<th>Gestionnaires: {{ totTotGestionnaires }}</th>
+					<th>Logements:  {{ totTotLogements }}</th>
+					<th>Capacité: {{ totTotCapacite }}</th>
+					<th>Occupants: {{ totTotOccupants }}</th>
+					<th>Disponibles: {{ totTotCapacite - totTotOccupants }}</th>
+					<th></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+
+
+	{# DOM SCRIPTS #}
+	<script>
+		document.getElementById("totLogements").innerHTML = {{ totTotLogements }};
+		document.getElementById("totCapacite").innerHTML = {{ totTotCapacite }};
+		document.getElementById("totOccupants").innerHTML = {{ totTotOccupants }};
+		document.getElementById("totDisponibles").innerHTML = {{ totTotCapacite - totTotOccupants }};
+		if ( {{ totTotCapacite - totTotOccupants }} < 0) {
+			$("#disponibles").html("Surcharge");			
+			$("#totDisponibles").html( Math.abs({{ totTotCapacite - totTotOccupants }}) );
+		}
+		if ( {{ totTotCapacite - totTotOccupants }} <= 0) {
+			$("#card-disponibles").addClass("border-left-primary-red");
+		}
+	</script>
+
+{% endblock %}

@@ -16,10 +16,16 @@
         {% if app.user.roles[0] == 'ROLE_ADMIN' %}
         <!-- Nav Item - Admin Dashboard -->
           <li class="nav-item">
-            <a href="{{ path('admin_gestionnaires_show') }}" class="nav-link">
+            <a href="{{ path('admin_gestionnaires_show') }}" class="nav-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
               <i class="fas fa-fw fa-tachometer-alt"></i>
               <span>Administration<span>
             </a>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ path('admin_gestionnaires_show') }}">Gestionnaires</a>
+                <a class="collapse-item" href="{{ path('admin_dispositifs_show') }}">Dispositifs</a>
+              </div>
+            </div>
           </li>
 
           <!-- Divider -->
