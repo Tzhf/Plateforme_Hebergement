@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block page_title %}Administration - {{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}{% endblock %}
+{% block page_title %}{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}{% endblock %}
 {% block title %}{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}{% endblock %}
 
 {% block body %}
@@ -7,7 +7,7 @@
 	{# BREADCRUMB #}
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ path('admin_gestionnaires_show') }}">Gestionnaires</a></li>
+			<li class="breadcrumb-item"><a href="{{ path('admin_dispositif_show', {'id': gestionnaire.dispositif.id }) }}">{{ gestionnaire.dispositif.nom }}</a></li>
 			<li class="breadcrumb-item active" aria-current="page">{{ gestionnaire.username }}, {{ gestionnaire.ville.nom }} - {{ gestionnaire.dispositif.nom }}</li>
 		</ol>
 	</nav>
@@ -116,7 +116,7 @@
 							{% endif %}
 							<td><a href="{{ path('admin_logement_show', {'id': logement.id }) }}" class="btn btn-success">Voir</button></a></td>
 							<td>
-								<form method="post" action="{{ path('logement_delete', {'id': logement.id}) }}">
+								<form method="post" action="{{ path('admin_logement_delete', {'id': logement.id}) }}">
 									<input type="hidden" name="_method" value="DELETE">
 									<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ logement.id) }}">
 									<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">

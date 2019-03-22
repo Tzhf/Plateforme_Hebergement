@@ -15,6 +15,9 @@ class LocationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('occupant', OccupantType::class, [
+                'data_class' => Occupant::class
+            ])
             ->add('dateEntree', DateType::class, array(
                 'widget' => 'single_text',
                 'by_reference' => true,
@@ -25,9 +28,6 @@ class LocationType extends AbstractType
                 'by_reference' => true,
                 'empty_data' => ''
             ))
-            ->add('occupant', OccupantType::class, [
-                'data_class' => Occupant::class
-            ])
             ->getForm();
     }
 

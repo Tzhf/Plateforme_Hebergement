@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block page_title %}Administration{% endblock %}
-{% block title %}Administration - Gestionnaires{% endblock %}
+{% block page_title %}Gestionnaires{% endblock %}
+{% block title %}Gestionnaires{% endblock %}
 
 {% block body %}
 
@@ -81,7 +81,6 @@
 		<div class="card-header">
 			<h6 class="m-0 font-weight-bold text-primary">Gestionnaires</h6>
 		</div>
-
 		<div class="card-body card-table">
 			<table id="datatable" class="display" style="width:100%">
 				<thead >
@@ -105,7 +104,7 @@
 						{% set totLogements = totLogements + gestionnaire.logements|length %}
 						<tr>
 							<td>{{ gestionnaire.username }}</td>
-							<td>{{ gestionnaire.dispositif.nom }}</td>
+							<td>{{ gestionnaire.dispositif.nom ?? '' }}</td>
 							<td>{{ gestionnaire.ville.nom }}</td>
 							<td>{{ gestionnaire.logements|length }}</td>
 							{% set gestCapacite = 0 %}
@@ -143,6 +142,31 @@
 			</table>
 		</div>
 	</div>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+			<div class="card mx-auto mb-5">
+				<div class="card-header">
+					<h6 class="m-0 font-weight-bold text-primary">Ajouter un gestionnaire</h6>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<div class="card-body">
+							{{ form_row(form.username, {'label': 'Nom du gestionnaire :', 'attr': {'placeholder': 'Nom du gestionnaire'}}) }}
+							{{ form_row(form.email, {'label': 'Email :', 'attr': {'placeholder': 'Adresse email'}}) }}
+							{{ form_row(form.password, {'label': 'Mot de passe :', 'attr': {'placeholder': 'Mot de passe'}}) }}
+							{{ form_row(form.confirm_password, {'label': 'Confirmez le mot de passe :', 'attr': {'placeholder': 'Confirmez le mot de passe'}}) }}
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="card-body">
+							{{ form_row(form.dispositif, {'label': 'Dispositif :'}) }}
+							{{ form_row(form.ville, {'label': 'Ville :'}) }}
+							<button type="submit" class="btn btn-success">Ajouter</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		{{ form_end(form) }}
 
 	{# DOM SCRIPTS #}
 	<script>

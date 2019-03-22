@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}Editer {{ "" }} {% endblock %}
+{% block title %}Editer {{ "" }} {% endblock %}
+
+{% block body %}
+
+	<div class="card shadow mt-2 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Editer les informations de l'occupant :</h6>
+		</div>
+		<div class="card-body">
+			{{ form_start(occupantForm, {'attr': {'novalidate': 'novalidate'}}) }}
+				<div class="row">
+					<div class="col-md-6">
+						{{ form_row(occupantForm.occupant.nom, {'attr' : {'placeholder': "Nom :"}, 'label' : 'Nom :'}) }}
+						{{ form_row(occupantForm.occupant.prenom, {'attr' : {'placeholder': "Prénom :"}, 'label' : 'Prénom :'}) }}
+						{{ form_row(occupantForm.occupant.nbEnfant, {'attr' : {'placeholder': "Nombre d'enfants"}, 'label' : 'Nombre d\'enfants :'}) }}
+					</div>
+					<div class="col-md-6">
+						{{ form_row(occupantForm.occupant.dateNaissance, {'attr' : {'placeholder': "Date de naissance"}, 'label' : 'Date de naissance :'}) }}
+						{{ form_row(occupantForm.dateEntree, {'attr' : {'placeholder': "Date d'arrivee"}, 'label' : 'Date de d\'arrivee :'}) }}
+						{{ form_row(occupantForm.dateSortie, {'attr' : {'placeholder': "Date de sortie"}, 'label' : 'Date de sortie :'}) }}
+					</div>
+					<button type="submit" class="btn btn-success">Editer</button>
+				</div>
+			{{ form_end(occupantForm) }}
+		</div>
+	</div>
+
+{% endblock %}

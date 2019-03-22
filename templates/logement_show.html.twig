@@ -82,11 +82,13 @@
 			<table id="datatable2" class="display" width="100%" cellspacing="0">
 				<thead>
 					<tr>
-						<th>Nom</th>
 						<th>Prénom</th>
+						<th>Nom</th>
 						<th>Date de naissance</th>
+						<th>Nombre d'enfants</th>
 						<th>Date entrée</th>
 						<th>Date de sortie</th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -95,13 +97,16 @@
 						<tr>
 							<td>{{ location.occupant.prenom }}</td>
 							<td>{{ location.occupant.nom }}</td>
-							<td>{{ location.occupant.dateNaissance|date("m/d/Y") }}</td>
-							<td>{{ location.dateSortie ? location.dateEntree|date("m/d/Y") }}</td>
-							<td {{ location.dateSortie and location.dateSortie < date() ? "class='bg-red'" }}>{{ location.dateSortie ? location.dateSortie|date("m/d/Y") }}
+							<td>{{ location.occupant.dateNaissance|date("d/m/Y") }}</td>
+							<td>{{ location.occupant.nbEnfant }}</td>
+							<td>{{ location.dateSortie ? location.dateEntree|date("d/m/Y") }}</td>
+							<td {{ location.dateSortie and location.dateSortie < date() ? "class='bg-red'" }}>{{ location.dateSortie ? location.dateSortie|date("d/m/Y") }}
 							{% if location.dateSortie and location.dateSortie < date() %}
 								<br><strong>La date de sortie est inférieure à la date d'aujourd'hui</strong>
 							{% endif %}
 							</td>
+							<td><a href="{{ path('occupant_edit', {'id': location.id }) }}" class="btn btn-success">Editer</button></a></td>
+
 							<td>
 								<form method="post" action="{{ path('occupant_delete', {'id': location.occupant.id, 'logementId': location.logement.id}) }}">
 									<input type="hidden" name="_method" value="DELETE">
@@ -116,20 +121,20 @@
 				</tbody>
 			</table>
 		</div>
-		
 		<div class="card-footer">
-			<h6 class="mb-4 font-weight-bold text-primary">Ajouter un nouvel occupant</h6>
-			<table>
+			<table id="datatable2" class="display" style="width:100%">
 				<tbody>
 					<tr>
-					{{ form_start(locationForm, {'attr': {'novalidate': 'novalidate'}}) }}
-					<td>{{ form_widget(locationForm.occupant.nom, {'attr' : {'placeholder': "Nom"}, 'label' : false }) }}</td>
-					<td>{{ form_widget(locationForm.occupant.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : false }) }}</td>
-					<td>{{ form_widget(locationForm.occupant.dateNaissance, {'label' : false }) }}</td>
-					<td>{{ form_widget(locationForm.dateEntree, {'label' : false }) }}</td>
-					<td>{{ form_widget(locationForm.dateSortie, {'label' : false }) }}</td>
-					<td><button type="submit" class="btn btn-success">Ajouter</button></td>
-					{{ form_end(locationForm) }}
+						{{ form_start(locationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+							<td>{{ form_widget(locationForm.occupant.nom, {'attr' : {'placeholder': "Nom"}, 'label' : false }) }}</td>
+							<td>{{ form_widget(locationForm.occupant.prenom, {'attr' : {'placeholder': "Prénom"}, 'label' : false }) }}</td>
+							<td>{{ form_widget(locationForm.occupant.dateNaissance, {'label' : false }) }}</td>
+							<td>{{ form_widget(locationForm.occupant.nbEnfant, {'attr' : {'placeholder': "Nb enfants"}, 'label' : false }) }}</td>
+							<td>{{ form_widget(locationForm.dateEntree, {'label' : false }) }}</td>
+							<td>{{ form_widget(locationForm.dateSortie, {'label' : false }) }}</td>
+							<td></td>
+							<td><button type="submit" class="btn btn-success">Ajouter</button></td>
+						{{ form_end(locationForm) }}
 					</tr>
 				</tbody>
 			</table>

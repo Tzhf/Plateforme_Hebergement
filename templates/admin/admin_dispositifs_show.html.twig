@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block page_title %}Administration{% endblock %}
-{% block title %}Administration - Dispositifs{% endblock %}
+{% block page_title %}Dispositifs{% endblock %}
+{% block title %}Dispositifs{% endblock %}
 
 {% block body %}
 
@@ -77,7 +77,7 @@
 
   </div>
 
-	<div class="card shadow mt-2 mb-5">
+	<div class="card shadow mt-2 mb-3">
 		<div class="card-header">
 			<h6 class="m-0 font-weight-bold text-primary">Dispositifs</h6>
 		</div>
@@ -118,8 +118,7 @@
 							<td>{{ totCapacite }}</td>
 							<td>{{ totOccupants }}</td>
 							<td>{{ totCapacite - totOccupants }}</td>
-							{# <td><a href="{{ path('admin_dispositif_show', {'id': dispositif.id }) }}" class="btn btn-success">Voir</button></a></td> #}
-							<td><a href="" class="btn btn-success">Voir</button></a></td>
+							<td><a href="{{ path('admin_dispositif_show', {'id': dispositif.id }) }}" class="btn btn-success">Voir</button></a></td>
 						</tr>
 						{% set totTotGestionnaires = totTotGestionnaires + dispositif.gestionnaires|length %}
 						{% set totTotLogements = totTotLogements + totLogements %}
@@ -142,13 +141,24 @@
 		</div>
 	</div>
 
+	<div class="card shadow mt-2 mb-5">
+		<div class="card-header">
+			<h6 class="m-0 font-weight-bold text-primary">Ajouter un dispositif</h6>
+		</div>
+		<div class="card-body">
+			{{ form_start(dispositifForm, {'attr': {'novalidate': 'novalidate'}}) }}
+				{{ form_row(dispositifForm.nom, {'attr' : {'placeholder': "Nom"}, 'label' : 'Nom :'}) }}
+				<button type="submit" class="btn btn-success">Ajouter</button>
+			{{ form_end(dispositifForm) }}
+		</div>
+	</div>
 
 	{# DOM SCRIPTS #}
 	<script>
-		document.getElementById("totLogements").innerHTML = {{ totTotLogements }};
-		document.getElementById("totCapacite").innerHTML = {{ totTotCapacite }};
-		document.getElementById("totOccupants").innerHTML = {{ totTotOccupants }};
-		document.getElementById("totDisponibles").innerHTML = {{ totTotCapacite - totTotOccupants }};
+		$("#totLogements").html({{ totTotLogements }});
+		$("#totCapacite").html({{ totTotCapacite }});
+		$("#totOccupants").html({{ totTotOccupants }});
+		$("#totDisponibles").html({{ totTotCapacite - totTotOccupants }});
 		if ( {{ totTotCapacite - totTotOccupants }} < 0) {
 			$("#disponibles").html("Surcharge");			
 			$("#totDisponibles").html( Math.abs({{ totTotCapacite - totTotOccupants }}) );

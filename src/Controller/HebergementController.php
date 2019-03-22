@@ -116,20 +116,23 @@ class HebergementController extends AbstractController
     }
 
     /**
-     * @Route("occupant/{id}/edit", name="edit_occupant")
+     * @Route("occupant/{id}/edit", name="occupant_edit")
      */
-    public function occupantEdit(Occupant $occupant = null, Request $request, ObjectManager $manager)
+    public function occupantEdit(Location $location, Request $request, ObjectManager $manager)
     {
-        $form = $this->createForm(OccupantType::class, $occupant);
-        $form->handlerequest($request);
+        $logement = $location->getLogement();
+        $occupantForm = $this->createForm(LocationType::class, $location);
+        $occupantForm->handlerequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager->persist($occupant);
+        if ($occupantForm->isSubmitted() && $occupantForm->isValid()) {
+            $manager->persist($location);
             $manager->flush();
             $this->addFlash('success', 'Occupant édité');
+            return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
         }
-        return $this->render('saisie_occupant.html.twig', [
-            'formoccupant' => $form->createView()
+
+        return $this->render('location_show.html.twig', [
+            'occupantForm' => $occupantForm->createView()
         ]);
 
     }

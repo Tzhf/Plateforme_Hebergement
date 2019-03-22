@@ -15,10 +15,13 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        // on crée une instance de Faker en précisant la langue des données qui seront générées 
         $faker = \Faker\Factory::create('fr_FR');
 
-        for($i=0;$i<=4;$i++) {
+        // on crée 5 dispositifs
+        for($i=0; $i < 5; $i++) {
             $dispositif = new Dispositif();
+            // on assigne à chaque dispositif un nom généré aléatoirement par faker
             $dispositif->setNom($faker->company());
             $manager->persist($dispositif);
 
@@ -26,18 +29,18 @@ class AppFixtures extends Fixture
             $ville->setNom($faker->city());
             $manager->persist($ville);
 
-            
-            for($j=0;$j<=10;$j++) {
+            // pour chaque dispositif on crée 10 gestionnaires
+            for($j=0; $j < 10; $j++) {
                 $gestionnaire = new Gestionnaire();
                 $gestionnaire->setUsername($faker->company());
                 $gestionnaire->setEmail($faker->email());
                 $gestionnaire->setPassword($faker->password());
                 $gestionnaire->setVille($ville);
                 $gestionnaire->setDispositif($dispositif);
-
                 $manager->persist($gestionnaire);
-                           
-                for($k=0;$k<=10;$k++) {
+                
+                // pour chaque gestionnaire on crée 10 logements
+                for($k=0; $k < 10; $k++) {
                     $logement = new Logement();
                     $logement->setGestionnaire($gestionnaire);
                     $logement->setNumRue(rand(1, 500));
@@ -49,22 +52,21 @@ class AppFixtures extends Fixture
                     $logement->setTypologie('T'.rand(1,5));
                     $logement->setDescription('Super ce logement');
                     $logement->setCapacite(rand(1, 5));
-                    
                     $manager->persist($logement);
+                                
+                    // pour chaque gestionnaire on crée entre 0 et 5 occupants
+                    for($l=0; $l < rand(0, 5); $l++) {
+                        $occupant = new Occupant();
+                        $occupant->setNom($faker->firstName());
+                        $occupant->setPrenom($faker->LastName());
+                        $manager->persist($occupant);
 
-                    $occupant = new Occupant();
-                    $occupant->setNom($faker->firstName());
-                    $occupant->setPrenom($faker->LastName());
-                    
-                    $manager->persist($occupant);
-
-                    $location = new Location();
-                    $location->setLogement($logement);
-                    $location->setOccupant($occupant);
-                    $location->setIsActive(1);
-                    $location->setcreatedAt(new \DateTime());
-                    
-                    $manager->persist($location);
+                        $location = new Location();
+                        $location->setLogement($logement);
+                        $location->setOccupant($occupant);
+                        $location->setcreatedAt(new \DateTime());
+                        $manager->persist($location);
+                    }
                 }
             }
         }
