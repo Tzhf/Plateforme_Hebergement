@@ -102,3 +102,7 @@ button, .btn {
 .dataTables_wrapper .btn {
     padding: .4rem;
 }
+
+.dataTable th {
+    padding-right: 15px !important;
+}

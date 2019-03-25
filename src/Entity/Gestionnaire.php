@@ -28,7 +28,7 @@ class Gestionnaire implements UserInterface
      * @Assert\NotBlank(message="Vous devez renseigner un nom du gestionnaire")
      * @Assert\Length(min=3, max=40, 
      *      minMessage="Le nom du gestionnaire doit contenir au moins {{ limit }} caractères", 
-     *      maxMessage="Le nom du gestonnaire peut contenir au maximum {{ limit }} caractères"
+     *      maxMessage="Le nom du gestionnaire peut contenir au maximum {{ limit }} caractères"
      * )
      */
     private $username;
@@ -53,7 +53,7 @@ class Gestionnaire implements UserInterface
      * @Assert\NotBlank(message="Veuillez confirmer votre mot de passe")
      * @Assert\EqualTo(propertyPath="password", message="Les mots de passe ne sont pas identiques")
      * @Assert\Length(min=5, max=11, 
-     *      minMessage="Votre mot de passe doit contenir au moins 5 caractères")
+     *      minMessage="Votre mot de passe doit contenir au moins 5 caractères",
      *      maxMessage="Votre mot de passe ne peut pas contenir plus de {{ limit }} caractères")
      */
     public $confirm_password;

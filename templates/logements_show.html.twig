@@ -85,11 +85,11 @@
 			<table id="datatable" class="display mb-4" style="width:100%">
 				<thead>
 					<tr>
-						<th>N° rue</th>
+						<th>N°</th>
 						<th>Nom rue</th>
 						<th>Ville</th>
-						<th>N° Bât</th>
-						<th>N° porte</th>
+						<th>Bât</th>
+						<th>Porte</th>
 						<th>Etage</th>
 						<th>Type</th>
 						<th>Détails</th>
@@ -138,16 +138,16 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<th>N° rue</th>
+						<th>N°</th>
 						<th>Nom rue</th>
 						<th>Ville</th>
-						<th>N° Bât</th>
-						<th>N° porte</th>
+						<th>Bât</th>
+						<th>Porte</th>
 						<th>Etage</th>
 						<th>Type</th>
-						<th>Details</th>
-						<th>Capacité :  {{ totCapacite }}</th>
-						<th>Occupants : {{ totOccupants }}</th>
+						<th>Détails</th>
+						<th>Capacité:  {{ totCapacite }}</th>
+						<th>Occupants: {{ totOccupants }}</th>
 						{% if totDisponibles < 0 %}
 							<th>Surcharge ({{ - totDisponibles }})</th>
 						{% else %}

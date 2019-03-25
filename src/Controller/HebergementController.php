@@ -51,6 +51,15 @@ class HebergementController extends AbstractController
      */
     public function logementShow(Logement $logement, Request $request, LocationRepository $location_repo, ObjectManager $manager)
     {
+        
+        // On empêche l'utilisateur d'accéder à d'autres logements que les siens
+        if($logement->getGestionnaire()->getId() != $this->getUser()->getId() ) {
+            return $this->redirectToRoute('logements_show');
+        }
+        if (!$logement) {
+            throw $this->createNotFoundException('Unable to find Link entity with id: ');
+        }
+        
         $logementForm = $this->createForm(LogementType::class, $logement);
         $logementForm->handlerequest($request);
 
