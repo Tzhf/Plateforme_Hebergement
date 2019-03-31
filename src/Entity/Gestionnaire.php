@@ -52,11 +52,8 @@ class Gestionnaire implements UserInterface
     /**
      * @Assert\NotBlank(message="Veuillez confirmer votre mot de passe")
      * @Assert\EqualTo(propertyPath="password", message="Les mots de passe ne sont pas identiques")
-     * @Assert\Length(min=5, max=11, 
-     *      minMessage="Votre mot de passe doit contenir au moins 5 caractères",
-     *      maxMessage="Votre mot de passe ne peut pas contenir plus de {{ limit }} caractères")
-     */
-    public $confirm_password;
+    */
+    public $password_confirm;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Ville", inversedBy="gestionnaires")
@@ -67,6 +64,11 @@ class Gestionnaire implements UserInterface
      * @ORM\Column(type="json_array", nullable=true)
      */
     private $roles = array();
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $resetToken;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Logement", mappedBy="gestionnaire", orphanRemoval=true)
@@ -120,6 +122,18 @@ class Gestionnaire implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
 
         return $this;
     }

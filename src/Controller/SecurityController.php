@@ -9,8 +9,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use App\Repository\GestionnaireRepository;
 use App\Entity\Gestionnaire;
 use App\Form\RegistrationType;
+use App\Form\PasswordResetType;
 
 class SecurityController extends AbstractController
 {
@@ -94,6 +96,78 @@ class SecurityController extends AbstractController
      */
     public function logout() {}
 
+        
+    /**
+    * @Route("reset_password", name="reset_password")
+    */
+    public function resetPassword(GestionnaireRepository $gestionnaire_repo, ObjectManager $manager, Request $request, \Swift_Mailer $mailer) {
+
+        $form = $this->createFormBuilder()
+            ->add('reset_email')
+            ->getForm();
+        $form->handlerequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $gestionnaire = $gestionnaire_repo->findOneByEmail($form->getData()['reset_email']);
+            if ($gestionnaire !== null) {
+                $token = uniqId();
+                $gestionnaire->setResetToken($token);
+                $manager->persist($gestionnaire);
+                $manager->flush();
+
+                $message = (new \Swift_Message('Plateforme Hébergement : Réinitialisation du mot de passe'))
+                ->setFrom('send@example.com')
+                ->setTo($form->getData()['reset_email'])
+                ->setBody(
+                    $this->renderView('emails/reset_password.html.twig',
+                    ['id' => $gestionnaire->getId(),
+                    'token' => $token
+                    ]),
+                    'text/html');
+                $mailer->send($message);
+
+                $this->addFlash('success', 'Message envoyé');
+                return $this->redirectToRoute('reset_password');                
+            } else {
+                $this->addFlash('danger', 'Cette adresse email n\'est pas enregistrée');
+                return $this->redirectToRoute('reset_password');                
+            }
+        }
+
+        return $this->render('security/reset_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+    * @Route("reset_password_token/{id}/{token}", name="reset_password_token")
+    */
+    public function resetPasswordToken(Gestionnaire $gestionnaire, ObjectManager $manager, Request $request, UserPasswordEncoderInterface $encoder) {
+        
+        if($request->get('token') == $gestionnaire->getResetToken()) {
+            $form = $this->createForm(PasswordResetType::class, $gestionnaire);
+        	$form->handlerequest($request);
+
+        	if($form->isSubmitted() && $form->isValid()) {
+                $hash = $encoder->encodePassword($gestionnaire, $gestionnaire->getPassword());
+        		$gestionnaire->setPassword($hash);               
+                $manager->persist($gestionnaire);
+                $manager->flush();       
+                
+                $this->addFlash('success', 'Mot de passe modifié');
+                return $this->redirectToRoute('connexion');
+            }
+
+        } else {
+            $this->addFlash('danger', 'URL invalide');
+            return $this->redirectToRoute('reset_password');                           
+        }        
+
+        return $this->render('security/reset_password_token.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+        
     protected function addFlash($type, $message)
     {
         if (!$this->container->has('session')) {

@@ -137,7 +137,7 @@ class AdminController extends AbstractController
         if ($logementForm->isSubmitted() && $logementForm->isValid()) {
             $manager->flush();
             $this->addFlash('success', 'Logement édité');
-            return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
+            return $this->redirectToRoute('admin_logement_show', ['id' => $logement->getId()]);
         }
 
         $locations = $location_repo->findByLogement($logement->getId());
@@ -151,7 +151,7 @@ class AdminController extends AbstractController
             $manager->persist($location);
             $manager->flush();
             $this->addFlash('success', 'Occupant ajouté');
-            return $this->redirectToRoute('logement_show', ['id' => $logement->getId()]);
+            return $this->redirectToRoute('admin_logement_show', ['id' => $logement->getId()]);
         }
 
         return $this->render('admin/admin_logement_show.html.twig', [

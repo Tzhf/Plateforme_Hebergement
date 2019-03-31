@@ -20,7 +20,7 @@ class RegistrationType extends AbstractType
             ->add('username')
             ->add('email')
             ->add('password', PasswordType::class)
-            ->add('confirm_password', PasswordType::class)
+            ->add('password_confirm', PasswordType::class)
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
                 'choice_label' => 'nom'

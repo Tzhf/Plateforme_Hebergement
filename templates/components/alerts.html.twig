@@ -1,8 +1,15 @@
 {% for label, flashes in app.session.flashbag.all %}
     {% for flash in flashes %}
-        <div class="alert alert-dismissible alert-{{label}}">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>{{ flash }}</strong>
+        <div class="alert alert-{{label}} btn-icon-split alert-dismissible animated--fade-in text-center w-100">
+            <span class="icon text-white-50">
+                <i class="fas fa-check"></i>
+            </span>
+            <span class="text">{{ flash }}</span>
+            <span class="icon text-white-50 ml-auto">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </span>
         </div>
     {% endfor %}
 {% endfor %}

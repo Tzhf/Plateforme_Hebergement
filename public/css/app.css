@@ -9,8 +9,8 @@ label {
     font-weight: 700;
 }
 .btn {
+    /* color: #FFF !important; */
     font-size: .8rem;
-    padding: .5rem;
 }
 .btn-secondary {
     background-color:#1cc88a;
@@ -80,7 +80,7 @@ button, .btn {
 }
 
 .collapse-inner {
-    background-color: #6284ec;
+    background-color: #62ece44d;
 }
 
 .collapse-inner a {
@@ -88,7 +88,7 @@ button, .btn {
 }
 .collapse-inner a:hover {
     color: #FFF !important;
-    background-color: #7792e4 !important;
+    background-color: rgba(119, 215, 228, 0.596) !important;
 }
 
 .dataTables_wrapper .dataTables_filter input {
@@ -97,10 +97,6 @@ button, .btn {
 
 .dataTables_wrapper .btn-group {
     padding-left: 1rem;
-}
-
-.dataTables_wrapper .btn {
-    padding: .4rem;
 }
 
 .dataTable th {

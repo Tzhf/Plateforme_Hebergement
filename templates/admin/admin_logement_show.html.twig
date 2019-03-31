@@ -104,14 +104,13 @@
 								<br><strong>La date de sortie est inférieure à la date d'aujourd'hui</strong>
 							{% endif %}
 							</td>
-							<td><a href="{{ path('admin_occupant_edit', {'id': location.id }) }}" class="btn btn-success">Editer</button></a></td>
+							<td><a href="{{ path('admin_occupant_edit', {'id': location.id }) }}" class="btn btn-success">Voir</button></a></td>
 
 							<td>
 								<form method="post" action="{{ path('admin_occupant_delete', {'id': location.occupant.id, 'logementId': location.logement.id}) }}">
 									<input type="hidden" name="_method" value="DELETE">
 									<input type="hidden" name="_token" value="{{ csrf_token('delete-' ~ location.occupant.id) }}">
-									<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" value="Supprimer">
-									{% include('components/modal_delete.html.twig')%}
+									{% include('components/delete_btn.html.twig')%}
 								</form>
 							</td>
 						</tr>

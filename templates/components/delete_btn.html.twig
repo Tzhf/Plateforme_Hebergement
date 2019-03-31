@@ -1,0 +1,32 @@
+<a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" >
+    <i class="fas fa-trash text-white"></i>
+</a>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ml-auto" id="exampleModalLabel">Confirmez la suppression</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Veuillez confirmer la suppression. Cette action est irréversible.
+            </div>
+            <div class="modal-footer">
+                <button href="#" class="btn btn-danger btn-icon-split">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-trash"></i>
+                    </span>
+                    <span class="text">Supprimer</span>
+                </button>
+                <a href="#" class="btn btn-light btn-icon-split">
+                    <span class="icon">
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                    <span class="text" data-dismiss="modal">Annuler</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
